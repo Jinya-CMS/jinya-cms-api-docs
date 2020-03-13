@@ -1,1 +1,0 @@
-# jinya-gallery-cms-docs
