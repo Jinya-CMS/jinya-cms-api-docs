@@ -1,0 +1,38 @@
+title: MenuItem
+type: object
+description: A MenuItem is an element in the menu navigation tree.
+properties:
+  id:
+    type: integer
+  children:
+    type: array
+    items:
+      $ref: ./MenuItem.v1.yaml
+  highlighted:
+    type: boolean
+    default: false
+  menu:
+    $ref: ./Menu.v1.yaml
+  pageType:
+    type: string
+    enum:
+      - media_gallery
+      - page
+      - segment_page
+      - external
+      - form
+      - profile
+      - empty
+  parent:
+    $ref: ./MenuItem.v1.yaml
+  position:
+    type: integer
+  route:
+    type: string
+  title:
+    type: string
+required:
+  - id
+  - pageType
+  - route
+  - title

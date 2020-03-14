@@ -1,0 +1,22 @@
+title: SegmentPage
+type: object
+x-tags:
+  - page
+  - content
+properties:
+  id:
+    type: integer
+  created:
+    $ref: ./Modification.v1.yaml
+  history:
+    type: string
+  updated:
+    $ref: ./Modification.v1.yaml
+  name:
+    type: string
+  segments:
+    type: array
+    items:
+      $ref: ''
+  slug:
+    type: string

@@ -1,0 +1,38 @@
+title: Artist
+type: object
+x-tags:
+  - artist
+  - configuration
+x-examples: {}
+description: 'Artists are the users, that log in to Jinya and add content'
+properties:
+  id:
+    type: integer
+  artistName:
+    type: string
+  roles:
+    type: array
+    enum:
+      - ROLE_SUPER_ADMIN
+      - ROLE_ADMIN
+      - ROLE_WRITER
+    items:
+      type: string
+  email:
+    type: string
+    format: email
+  enabled:
+    type: string
+  firstname:
+    type: string
+    deprecated: true
+  lastname:
+    type: string
+    deprecated: true
+  profilePicture:
+    type: string
+  '':
+    type: string
+required:
+  - artistName
+  - email

@@ -1,0 +1,9 @@
+title: ValidationError
+type: object
+x-tags:
+  - error
+properties:
+  success:
+    type: boolean
+  validation:
+    type: object

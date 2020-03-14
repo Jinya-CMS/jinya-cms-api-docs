@@ -1,0 +1,28 @@
+title: File
+type: object
+x-tags:
+  - media
+  - content
+description: A file is an uploaded file that can be used in pages and galleries
+properties:
+  id:
+    type: integer
+  created:
+    $ref: ./Modification.v1.yaml
+  galleries:
+    type: array
+    items:
+      $ref: ./GalleryFilePosition.v1.yaml
+  history:
+    type: array
+    items: {}
+  name:
+    type: string
+  path:
+    type: string
+  type:
+    type: string
+  updated:
+    $ref: ./Modification.v1.yaml
+required:
+  - name

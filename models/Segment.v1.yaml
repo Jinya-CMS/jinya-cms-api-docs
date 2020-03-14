@@ -1,0 +1,26 @@
+title: Segment
+type: object
+properties:
+  id:
+    type: integer
+  action:
+    type: string
+  file:
+    $ref: ./File.v1.yaml
+  form:
+    $ref: ./Form.v1.yaml
+  gallery:
+    $ref: ./Gallery.v1.yaml
+  html:
+    type: string
+  page:
+    type: string
+  position:
+    type: string
+  script:
+    type: string
+  target:
+    type: string
+x-tags:
+  - content
+  - page

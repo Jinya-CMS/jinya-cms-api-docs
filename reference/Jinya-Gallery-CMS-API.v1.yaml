@@ -1,0 +1,1366 @@
+openapi: 3.0.0
+info:
+  title: Jinya Gallery CMS API
+  version: '1.0'
+  contact:
+    name: Jinya Developers
+    url: 'https://github.com/Jinya-CMS/Jinya-Gallery-CMS'
+    email: developers@jinya.de
+  license:
+    name: MIT
+    url: 'https://github.com/Jinya-CMS/Jinya-Gallery-CMS/blob/develop/LICENSE'
+  description: This API docs specifies the the Jinya Gallery CMS API
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /api/login:
+    post:
+      summary: Log a user in
+      tags:
+        - authentication
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  apiKey:
+                    type: string
+                  deviceCode:
+                    type: string
+                  roles:
+                    type: array
+                    enum:
+                      - ROLE_WRITER
+                      - ROLE_SUPER_ADMIN
+                      - ROLE_ADMIN
+                    items:
+                      type: string
+                required:
+                  - apiKey
+                  - deviceCode
+                  - roles
+              examples:
+                All data returned:
+                  value:
+                    apiKey: jinya-api-token-13-ac6197ef4156dac55fb29f0f4a2503f09492e063
+                    deviceCode: 0d8a15f321a2b81d6fe53b1519d59dc80439b8fe
+                    roles:
+                      - ROLE_SUPER_ADMIN
+                      - ROLE_ADMIN
+                      - ROLE_WRITER
+        '401':
+          description: Unknown Device
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Unknown Device:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.401.unknown_device
+                      type: UnknownDeviceException
+        '403':
+          description: Bad Credentials
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Bad Credentials:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.403.generic
+                      type: BadCredentialsException
+                example-2: {}
+      operationId: api_account_login
+      description: 'With the login api a user can be logged in. If the device code is empty, you need to provide a two factor code. If the two factor code is empty, you need to provide a device code.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                twoFactorCode:
+                  type: string
+              required:
+                - username
+                - password
+            examples:
+              Provided Two Factor Code:
+                value:
+                  username: jane.doe@example.com
+                  paswword: VeryS3cret
+                  twoFactorCode: '123456'
+              'No Two Factor Code, remember to set the JinyaDeviceCode header':
+                value:
+                  username: jane.doe@example.com
+                  paswword: VeryS3cret
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: JinyaDeviceCode
+          description: The Jinya Device Code contains the identification for a known device
+    head:
+      summary: Check the validity of a Jinya Api Key
+      tags:
+        - authentication
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+      operationId: account_login_check
+      description: Checks whether the JinyaApiKey provided in the header is still valid.
+      requestBody: {}
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: JinyaApiKey
+          description: The Jinya API Key that should get validated
+  api/account:
+    parameters: []
+    get:
+      summary: Get user account info
+      operationId: api_account_get
+      responses:
+        '200':
+          description: OK
+        '':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artistName:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  profilePicture:
+                    type: string
+                  roles:
+                    type: array
+                    enum:
+                      - ROLE_ADMIN
+                      - ROLE_SUPER_ADMIN
+                      - ROLE_WRITER
+                    items: {}
+                required:
+                  - artistName
+                  - email
+                  - profilePicture
+                  - roles
+              examples:
+                User Details:
+                  value:
+                    id: 13
+                    artistName: Jane Doe
+                    email: jane.doe@example.com
+                    profilePicture: ''
+                    roles:
+                      - ROLE_SUPER_ADMIN
+                      - ROLE_ADMIN
+                      - ROLE_WRITER
+          description: Successfully got all informations
+      description: Gets the currently logged in users details
+      security:
+        - JinyaApiKey: []
+  /api/account/password:
+    put:
+      summary: Change user password
+      tags:
+        - authentication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  token:
+                    type: string
+                required:
+                  - url
+                  - token
+              examples:
+                Confirmation token sent:
+                  value:
+                    url: /api/account/password
+                    token: tH9nIvvqH/r5hg==
+        '204':
+          description: No Content
+        '400':
+          description: New password is missing
+          content:
+            application/json:
+              schema:
+                $ref: ../models/ValidationError.v1.yaml
+              examples:
+                New password is missing:
+                  value:
+                    success: false
+                    validation:
+                      password: api.account.field.password.missing
+        '401':
+          description: Authentication Failed
+          content:
+            application/json:
+              schema:
+                $ref: ../models/AuthenticationError.v1.yaml
+              examples:
+                Authentication Failed:
+                  value:
+                    type: 'https://tools.ietf.org/html/rfc2616#section-10'
+                    title: An error occurred
+                    status: 401
+                    detail: Unauthorized
+        '403':
+          description: Old Password is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Old Password is missing or invalid:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.403.generic
+                      type: AccessDeniedException
+      operationId: api_account_password_put
+      description: Updates the password of the current user
+      security:
+        - JinyaApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: The password is only required when the token was optained
+                old_password:
+                  type: string
+                  description: The old password is required to obtain a confirmation token
+                token:
+                  type: string
+                  description: The confirmation token is only required when the password is send to change it
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+          text/html:
+            schema:
+              type: object
+              properties: {}
+          text/plain:
+            schema:
+              type: object
+              properties: {}
+        description: ''
+  /api/2fa:
+    post:
+      summary: Get the two factor code for the user
+      tags:
+        - authentication
+      responses:
+        '204':
+          description: No Content
+        '403':
+          description: Invalid username or password
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Invalid username or password:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.403.generic
+                      type: BadCredentialsException
+        '500':
+          description: Sending of the email failed
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Email failed:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.500.generic
+                      type: TransportException
+      operationId: api_account_2fa
+      description: This request creates a new two factor token and sends it to the users registration email address.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+            examples:
+              Request:
+                value:
+                  username: jane.doe@example.com
+                  password: start1234
+  /api/account/api_key:
+    get:
+      summary: Get all api keys
+      tags:
+        - authentication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  invalidateApiKeyAfter:
+                    type: integer
+                  items:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        remoteAddress:
+                          type: string
+                        userAgent:
+                          type: string
+                        key:
+                          type: string
+                        validSince:
+                          type: string
+                          format: date-time
+                      required:
+                        - remoteAddress
+                        - userAgent
+                        - key
+                        - validSince
+                required:
+                  - success
+                  - invalidateApiKeyAfter
+                  - items
+              examples:
+                List of valid API keys:
+                  value:
+                    success: true
+                    invalidateApiKeyAfter: 86400
+                    items:
+                      - remoteAddress: 10.0.2.2
+                        userAgent: Apache-HttpClient/4.5.10 (Java/11.0.5)
+                        key: jinya-api-token-13-726c10fa6807e738b90cb71bde113c77a9e9c66e
+                        validSince: '2020-03-15T23:03:01+00:00'
+                      - remoteAddress: 10.0.2.2
+                        userAgent: Apache-HttpClient/4.5.10 (Java/11.0.5)
+                        key: jinya-api-token-13-bbc498523fa52361419afa4bbdb8d7115d96fb3e
+                        validSince: '2020-03-14T23:15:11+00:00'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../models/AuthenticationError.v1.yaml
+              examples:
+                Authentication Failed:
+                  value:
+                    type: 'https://tools.ietf.org/html/rfc2616#section-10'
+                    title: An error occurred
+                    status: 401
+                    detail: Unauthorized
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+      operationId: api_api_key_get_all
+      description: Gets all currently valid api keys
+      security:
+        - JinyaApiKey: []
+    parameters: []
+  '/api/account/api_key/{key}':
+    parameters:
+      - schema:
+          type: string
+        name: key
+        in: path
+        required: true
+    delete:
+      summary: Delete a given API Key
+      operationId: api_api_key_delete
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../models/AuthenticationError.v1.yaml
+              examples:
+                Authentication Failed:
+                  value:
+                    type: 'https://tools.ietf.org/html/rfc2616#section-10'
+                    title: An error occurred
+                    status: 401
+                    detail: Unauthorized
+        '404':
+          description: The specified api key was not found
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                The specified api key was not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      tags: []
+      security:
+        - JinyaApiKey: []
+      description: Deletes the api key given in the request path
+  /api/account/known_device:
+    get:
+      summary: Get all known devices
+      tags:
+        - authentication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  items:
+                    type: object
+                    required:
+                      - remoteAddress
+                      - userAgent
+                      - key
+                    properties:
+                      remoteAddress:
+                        type: string
+                      userAgent:
+                        type: string
+                      key:
+                        type: string
+                  '':
+                    type: string
+                required:
+                  - success
+                  - items
+              examples:
+                List of known devices:
+                  value:
+                    success: true
+                    items:
+                      - remoteAddress: 10.0.2.2
+                        userAgent: Apache-HttpClient/4.5.10 (Java/11.0.5)
+                        key: 0d8a15f321a2b81d6fe53b1519d59dc80439b8fe
+                      - remoteAddress: 10.0.2.2
+                        userAgent: Apache-HttpClient/4.5.10 (Java/11.0.5)
+                        key: 792096bd2b48bd068c002e576ff7bdbab0113f48
+                      - remoteAddress: 10.0.2.2
+                        userAgent: Apache-HttpClient/4.5.10 (Java/11.0.5)
+                        key: 5a24b7130658d3c8acddbfea72ff2f2d6f8dda53
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../models/AuthenticationError.v1.yaml
+              examples:
+                Authentication failed:
+                  value:
+                    type: 'https://tools.ietf.org/html/rfc2616#section-10'
+                    title: An error occurred
+                    status: 401
+                    detail: Unauthorized
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+      operationId: api_known_device_get_all
+      security:
+        - JinyaApiKey: []
+      description: Gets a list of all known devices
+  '/api/account/known_device/{key}':
+    parameters:
+      - schema:
+          type: string
+        name: key
+        in: path
+        required: true
+    delete:
+      summary: Delete the given known device
+      tags:
+        - authentication
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: ../models/AuthenticationError.v1.yaml
+              examples:
+                Authentication failed:
+                  value:
+                    type: 'https://tools.ietf.org/html/rfc2616#section-10'
+                    title: An error occurred
+                    status: 401
+                    detail: Unauthorized
+        '403':
+          description: Invalid API Key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Not found error:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_known_device_delete
+      description: 'Deletes the given known device key. Next time this devices, tries to log in a two factor code is required'
+      security:
+        - JinyaApiKey: []
+      requestBody: {}
+  /api/configuration:
+    get:
+      summary: Gets the current configuration of Jinya
+      tags:
+        - configuration
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  frontend:
+                    type: object
+                    properties:
+                      theme:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          displayName:
+                            type: string
+                          description:
+                            type: string
+                  invalidateApiKeyAfter:
+                    type: string
+                  messagingCenterEnabled:
+                    type: string
+              examples:
+                Current configuration:
+                  value:
+                    frontend:
+                      theme:
+                        name: jinya-default-theme
+                        displayName: Jinya Default Theme
+                        description: The default theme of the jinya cms is modern and provides a good looking user interface.
+                    invalidateApiKeyAfter: 86400
+                    messagingCenterEnabled: true
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Authentication failed:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+      operationId: api_configuration_get
+      description: Gets the current configuration of Jinya.
+      security:
+        - JinyaApiKey: []
+  '/api/configuration/{themeName}':
+    parameters:
+      - schema:
+          type: string
+        name: themeName
+        in: path
+        required: true
+    put:
+      summary: Changes the currently selected theme
+      tags:
+        - configuration
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+              examples:
+                Authentication failed:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                The selected theme was not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_configuration_frontend_put
+      description: Updates the currently active theme and regenerates the cache.
+      security:
+        - JinyaApiKey: []
+  /api/form:
+    get:
+      summary: Gets all available forms
+      tags:
+        - form
+        - content
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                  offset:
+                    type: string
+                  count:
+                    type: string
+                  items:
+                    type: array
+                    items:
+                      $ref: ../models/Form.v1.yaml
+                  control:
+                    type: string
+              examples:
+                List of forms:
+                  value:
+                    success: true
+                    offset: 0
+                    count: 2
+                    items:
+                      - slug: contact
+                        title: Contact
+                        description: 'For Questions, Commissions, Orders, Collaborations or anything else, please use the form below'
+                        toAddress: jane.doe@example.com
+                        items:
+                          - id: 1
+                            label: Name
+                            type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
+                            options:
+                              required: true
+                              subject: true
+                            helptext: ''
+                            spamFilter:
+                              - Theo Test
+                          - id: 2
+                            label: Email
+                            type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\EmailType"
+                            options:
+                              required: true
+                              from_address: true
+                            helptext: ''
+                            spamFilter: null
+                          - id: 3
+                            label: Concern
+                            type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType"
+                            options:
+                              required: false
+                              choices:
+                                - Questions
+                                - Commissions
+                                - Orders
+                                - Collaborations
+                                - Anything else
+                            helptext: 'To help me respond quicker, please choose your concern'
+                            spamFilter: null
+                          - id: 4
+                            label: Text Message
+                            type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextareaType"
+                            options:
+                              required: true
+                            helptext: ''
+                            spamFilter: null
+                      - slug: testformular
+                        title: Testformular
+                        description: ''
+                        toAddress: jane.doe@example.com
+                        items:
+                          - id: 5
+                            label: Einzeiliger Text
+                            type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
+                            options:
+                              required: false
+                            helptext: ''
+                            spamFilter: []
+                    control:
+                      next: false
+                      previous: false
+      operationId: api_form_get_all
+      security:
+        - JinyaApiKey: []
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: The keyword to search by
+    post:
+      summary: Creates a new form
+      tags:
+        - form
+        - content
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  slug:
+                    type: string
+                  title:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  toAddress:
+                    type: string
+              examples:
+                Created form:
+                  value:
+                    slug: contact-me
+                    title: Contact me
+                    name: Contact me
+                    description: 'This is my contact from, please contact me.'
+                    toAddress: jane.doe@example.com
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: ../models/ValidationError.v1.yaml
+              examples:
+                Validation Error:
+                  value:
+                    success: false
+                    validation:
+                      title: api.form.field.title.empty
+                      toAddress: api.form.field.toAddress.empty
+        '401':
+          description: Api token missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Api token missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api token:
+                  value:
+                    message: Username could not be found.
+        '409':
+          description: 'Title, name or slug are not unique'
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Unique failed:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.409.exists
+                      type: UniqueConstraintViolationException
+      operationId: api_form_post
+      description: Creates a new form with the given parameters
+      security:
+        - JinyaApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                slug:
+                  type: string
+                toAddress:
+                  type: string
+                title:
+                  type: string
+                description:
+                  type: string
+              required:
+                - toAddress
+                - title
+            examples:
+              Form with required fields:
+                value:
+                  title: Contact me
+                  toAddress: jane.doe@example.com
+              Form with all fields:
+                value:
+                  title: Contact me
+                  toAddress: jane.doe@example.com
+                  description: 'This is my contact from, please contact me.'
+                  slug: contact-form
+  '/api/form/{slug}':
+    parameters:
+      - schema:
+          type: string
+        name: slug
+        in: path
+        required: true
+    get:
+      summary: Gets the form by slug
+      tags:
+        - content
+        - form
+      responses:
+        '200':
+          description: The requested form
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Form.v1.yaml
+              examples:
+                Anonymously requested form:
+                  value:
+                    slug: contact
+                    description: 'For Questions, Commissions, Orders, Collaborations or anything else, please use the form below'
+                    title: Contact
+                    items:
+                      - id: 1
+                        label: Name
+                        type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
+                        options:
+                          required: true
+                          subject: true
+                        helptext: ''
+                        spamFilter:
+                          - Theo Test
+                Logged in requested form:
+                  value:
+                    slug: contact
+                    description: 'For Questions, Commissions, Orders, Collaborations or anything else, please use the form below'
+                    title: Contact
+                    items:
+                      - id: 1
+                        label: Name
+                        type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
+                        options:
+                          required: true
+                          subject: true
+                        helptext: ''
+                        spamFilter:
+                          - Theo Test
+                    created:
+                      by:
+                        artistName: Imanuel
+                        email: imanuel.ulbricht@outlook.com
+                        profilePicture: /public/profile_picture/1ed2d91c6fde8446c24f80b265369cd6bac82c321438570694415de7e10e6b8d
+                      at:
+                        date: '2018-02-18 15:20:20.000000'
+                        timezone_type: 3
+                        timezone: UTC
+                    updated:
+                      by:
+                        artistName: Jane Doe
+                        email: jane.doe@example.com
+                        profilePicture: /public/profile_picture/12e51f99738069c004562ca899b979871140f7f53996a1f1422e29948897eed0
+                      at:
+                        date: '2020-03-14 00:42:01.292937'
+                        timezone_type: 3
+                        timezone: UTC
+                    history:
+                      - entry:
+                          items:
+                            - null
+                            - - id: null
+                                type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
+                                label: Name
+                                helpText: ''
+                                options:
+                                  required: true
+                                required: true
+                                selectOptions: ''
+                    name: ''
+                    emailTemplate: ''
+                    toAddress: jane.doe@example.com
+      operationId: api_form_get
+      description: 'Gets the specified form, more details are returned when the user is logged in.'
+      security:
+        - JinyaApiKey: []
+    delete:
+      summary: Deletes the given form
+      tags:
+        - content
+        - form
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Api key missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Form not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_form_delete
+      description: Deletes the given form.
+      security:
+        - JinyaApiKey: []
+    put:
+      summary: Updates the given form
+      tags:
+        - content
+        - form
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Api Key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Api Key missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+        '409':
+          description: 'Title, name or slug are not unique'
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Unique failed:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.409.exists
+                      type: UniqueConstraintViolationException
+      operationId: api_form_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                slug:
+                  type: string
+                description:
+                  type: string
+                toAddress:
+                  type: string
+                  format: email
+                name:
+                  type: string
+                  deprecated: true
+            examples:
+              All fields:
+                value:
+                  title: Contact Form
+                  slug: contact-form
+                  description: Contact me if you have any questions
+                  toAddress: contact@example.com
+                  name: Contact Form
+      description: Updates the given form with the specified values
+      security:
+        - JinyaApiKey: []
+  '/api/form/{slug}/items':
+    parameters:
+      - schema:
+          type: string
+        name: slug
+        in: path
+        required: true
+    get:
+      summary: Gets the items of the given form
+      tags:
+        - content
+        - form
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../models/FormItem.v1.yaml
+              examples:
+                Items:
+                  value:
+                    - form:
+                        title: Contact
+                        slug: contact
+                      options:
+                        required: true
+                        subject: true
+                      label: Name
+                      position: 0
+                      type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
+                      spamFilter:
+                        - Theo Test
+                        - Was letzte Preis
+                    - form:
+                        title: Contact
+                        slug: contact
+                      options:
+                        required: true
+                        from_address: true
+                      label: Email
+                      position: 1
+                      type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\EmailType"
+                      spamFilter: null
+                    - form:
+                        title: Contact
+                        slug: contact
+                      options:
+                        required: false
+                        choices:
+                          - Questions
+                          - Commissions
+                          - Orders
+                          - Collaborations
+                          - Anything else
+                      label: Concern
+                      position: 2
+                      type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType"
+                      spamFilter: null
+                    - form:
+                        title: Contact
+                        slug: contact
+                      options:
+                        required: true
+                      label: Text Message
+                      position: 3
+                      type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextareaType"
+                      spamFilter: null
+      operationId: api_form_item_get_all
+      security:
+        - JinyaApiKey: []
+  '/api/form/{slug}/items/{position}':
+    parameters:
+      - schema:
+          type: string
+        name: slug
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: position
+        in: path
+        required: true
+    get:
+      summary: Gets the item at the given position from the given form
+      tags:
+        - content
+        - form
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                example-1:
+                  value:
+                    form:
+                      title: Contact
+                      slug: contact
+                    position: 0
+                    label: Name
+                    helptext: ''
+                    options:
+                      required: true
+                      subject: true
+                    spamFilter:
+                      - Theo Test
+                      - Was letzte Preis
+                    type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
+                    created:
+                      by:
+                        artistName: Imanuel
+                        email: imanuel.ulbricht@outlook.com
+                        profilePicture: /public/profile_picture/1ed2d91c6fde8446c24f80b265369cd6bac82c321438570694415de7e10e6b8d
+                      at:
+                        date: '2018-02-18 15:20:20.000000'
+                        timezone_type: 3
+                        timezone: UTC
+                    updated:
+                      by:
+                        artistName: Jane Doe
+                        email: jane.doe@example.com
+                        profilePicture: /public/profile_picture/12e51f99738069c004562ca899b979871140f7f53996a1f1422e29948897eed0
+                      at:
+                        date: '2020-03-14 01:30:21.735612'
+                        timezone_type: 3
+                        timezone: UTC
+                    history:
+                      - entry:
+                          id:
+                            - null
+                            - null
+                          type:
+                            - null
+                            - "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
+                          label:
+                            - null
+                            - Name
+                          helpText:
+                            - null
+                            - ''
+                          options:
+                            - null
+                            - required: true
+                          required:
+                            - null
+                            - true
+                          selectOptions:
+                            - null
+                            - ''
+                        timestamp: '2018-02-18T15:20:20+01:00'
+                        initial: true
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_form_item_get
+      description: Gets the item from the given form at the given position
+    post:
+      summary: Creates a new item at the given position
+      tags:
+        - content
+        - form
+      responses: {}
+      operationId: post-api-form-slug-items-position
+    put:
+      summary: Updates the form item at the given form
+      tags:
+        - content
+        - form
+      responses: {}
+      operationId: put-api-form-slug-items-position
+    delete:
+      summary: Deletes the item at the given position in the given form
+      tags:
+        - content
+        - form
+      responses: {}
+      operationId: delete-api-form-slug-items-position
+components:
+  schemas: {}
+  securitySchemes:
+    JinyaApiKey:
+      name: Jinya Api Key
+      type: apiKey
+      in: header
+      description: A Jinya API Key is generated after a user successfully logged in and returned in the response body of the login response

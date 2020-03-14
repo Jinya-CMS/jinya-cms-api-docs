@@ -1,0 +1,99 @@
+title: Theme
+type: object
+x-tags:
+  - theme
+  - configuration
+properties:
+  config:
+    type: object
+  description:
+    type: string
+  displayName:
+    type: string
+  files:
+    type: object
+    properties:
+      '':
+        type: object
+        description: This template defines the files in the theme. Each file name is the objects key
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+  footerMenu:
+    type: string
+    deprecated: true
+  forms:
+    type: object
+    description: ''
+    properties:
+      '':
+        type: object
+        description: This template defines the forms in the theme. Each forms name is the objects key
+        properties:
+          id:
+            type: integer
+          slug:
+            type: string
+          name:
+            type: string
+  galleries:
+    type: object
+    description: ''
+    properties:
+      '':
+        type: object
+        description: This template defines the galleries in the theme. Each gallery name is the objects key
+        properties:
+          slug:
+            type: string
+          name:
+            type: string
+  menus:
+    type: object
+    description: This template defines the menus in the theme. Each menu name is the objects key
+    properties:
+      '':
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+  name:
+    type: string
+  pages:
+    type: object
+    properties:
+      '':
+        type: object
+        description: This template defines the pages in the theme. Each page name is the objects key
+        properties:
+          id:
+            type: integer
+          slug:
+            type: string
+          name:
+            type: string
+  previewImage:
+    type: string
+  primaryMenu:
+    type: string
+    deprecated: true
+  scssVariables:
+    type: string
+  secondaryMenu:
+    type: string
+    deprecated: true
+  segmentPages:
+    type: object
+    properties:
+      '':
+        type: object
+        description: This template defines the segment pages in the theme. Each segment page name is the objects key
+        properties:
+          slug:
+            type: string
+          name:
+            type: string

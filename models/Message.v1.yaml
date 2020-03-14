@@ -1,0 +1,39 @@
+title: Message
+type: object
+x-tags:
+  - form
+  - content
+description: A message is a submitted form element and displayed in the messaging center
+properties:
+  id:
+    type: integer
+  archived:
+    type: boolean
+  content:
+    type: string
+  form:
+    $ref: ./Form.v1.yaml
+  fromAddress:
+    type: string
+    format: email
+  read:
+    type: boolean
+  sendAt:
+    type: string
+    format: date-time
+  spam:
+    type: boolean
+  subject:
+    type: string
+  toAddress:
+    type: string
+    format: email
+  trash:
+    type: boolean
+required:
+  - id
+  - content
+  - form
+  - fromAddress
+  - subject
+  - toAddress
