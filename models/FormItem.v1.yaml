@@ -10,7 +10,12 @@ properties:
   created:
     $ref: ./Modification.v1.yaml
   form:
-    $ref: ./Form.v1.yaml
+    type: object
+    properties:
+      slug:
+        type: string
+      title:
+        type: string
   helpText:
     type: string
   history:

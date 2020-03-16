@@ -13,9 +13,6 @@ properties:
     type: array
     items:
       $ref: ./GalleryFilePosition.v1.yaml
-  history:
-    type: array
-    items: {}
   name:
     type: string
   path:
