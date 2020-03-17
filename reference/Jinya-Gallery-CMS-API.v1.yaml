@@ -13,12 +13,12 @@ info:
 servers:
   - url: 'http://localhost:8080'
     description: Local development environment
-  - url: 'https://{jinya-server}/'
+  - url: 'https://{jinya-server}'
     description: Productive Jinya environment
 paths:
   /api/login:
     post:
-      summary: Log a user in
+      summary: Login
       tags:
         - authentication
       responses:
@@ -136,7 +136,7 @@ paths:
   api/account:
     parameters: []
     get:
-      summary: Get user account info
+      summary: Get user info
       operationId: api_account_get
       responses:
         '200':
@@ -205,9 +205,11 @@ paths:
       description: Gets the currently logged in users details
       security:
         - Jinya Api Key: []
+      tags:
+        - artist
   /api/account/password:
     put:
-      summary: Change user password
+      summary: Change password
       tags:
         - authentication
       responses:
@@ -308,7 +310,7 @@ paths:
         description: ''
   /api/2fa:
     post:
-      summary: Get the two factor code for the user
+      summary: Request two factor code
       tags:
         - authentication
       responses:
@@ -360,7 +362,7 @@ paths:
                   password: start1234
   /api/account/api_key:
     get:
-      summary: Get all api keys
+      summary: List api keys
       tags:
         - authentication
       responses:
@@ -452,7 +454,7 @@ paths:
         in: path
         required: true
     delete:
-      summary: Delete a given API Key
+      summary: Delete api key
       operationId: api_api_key_delete
       responses:
         '204':
@@ -489,7 +491,7 @@ paths:
       description: Deletes the api key given in the request path
   /api/account/known_device:
     get:
-      summary: Get all known devices
+      summary: List known devices
       tags:
         - authentication
       responses:
@@ -572,7 +574,7 @@ paths:
         in: path
         required: true
     delete:
-      summary: Delete the given known device
+      summary: Delete known device
       tags:
         - authentication
       responses:
@@ -624,7 +626,7 @@ paths:
       requestBody: {}
   /api/configuration:
     get:
-      summary: Gets the current configuration of Jinya
+      summary: Get configuration
       tags:
         - configuration
       responses:
@@ -699,7 +701,7 @@ paths:
         in: path
         required: true
     put:
-      summary: Changes the currently selected theme
+      summary: Change selected theme
       tags:
         - configuration
       responses:
@@ -750,7 +752,7 @@ paths:
         - Jinya Api Key: []
   /api/form:
     get:
-      summary: Gets all available forms
+      summary: List forms
       tags:
         - form
         - content
@@ -847,8 +849,9 @@ paths:
           in: query
           name: keyword
           description: The keyword to search by
+      description: Gets all forms
     post:
-      summary: Creates a new form
+      summary: Create form
       tags:
         - form
         - content
@@ -970,7 +973,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Gets the form by slug
+      summary: Get form by slug
       tags:
         - content
         - form
@@ -1050,7 +1053,7 @@ paths:
       security:
         - Jinya Api Key: []
     delete:
-      summary: Deletes the given form
+      summary: Deletes form by slug
       tags:
         - content
         - form
@@ -1101,7 +1104,7 @@ paths:
       security:
         - Jinya Api Key: []
     put:
-      summary: Updates the given form
+      summary: Update form by slug
       tags:
         - content
         - form
@@ -1198,7 +1201,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Gets the items of the given form
+      summary: List form items
       tags:
         - content
         - form
@@ -1263,6 +1266,7 @@ paths:
       operationId: api_form_item_get_all
       security:
         - Jinya Api Key: []
+      description: Gets the items of the given form
   '/api/form/{slug}/items/{position}':
     parameters:
       - schema:
@@ -1276,7 +1280,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Gets the item at the given position from the given form
+      summary: Get form item by slug and position
       tags:
         - content
         - form
@@ -1364,7 +1368,7 @@ paths:
       security:
         - Jinya Api Key: []
     post:
-      summary: Creates a new item at the given position
+      summary: Create new form item
       tags:
         - content
         - form
@@ -1518,7 +1522,7 @@ paths:
       security:
         - Jinya Api Key: []
     put:
-      summary: Updates the form item at the given form
+      summary: Update form item by slug and position
       tags:
         - content
         - form
@@ -1565,7 +1569,7 @@ paths:
                       message: api.state.404.generic
                       type: NoResultException
       operationId: api_form_item_put
-      description: 'Updates teh form item at the given position, it is not possible to update the position using this method'
+      description: 'Updates the form item at the given position, it is not possible to update the position using this method'
       security:
         - Jinya Api Key: []
       requestBody:
@@ -1609,7 +1613,7 @@ paths:
                     required: true
         description: ''
     delete:
-      summary: Deletes the item at the given position in the given form
+      summary: Deletes form item by slug an position
       tags:
         - content
         - form
@@ -1677,7 +1681,7 @@ paths:
         in: path
         required: true
     put:
-      summary: Moves a form item
+      summary: Move form item
       tags:
         - content
         - form
@@ -1729,7 +1733,7 @@ paths:
         - Jinya Api Key: []
   /api/cache/jinya:
     put:
-      summary: Generates the Jinya Cache
+      summary: Generate Jinya Cache
       tags:
         - maintenance
         - cache
@@ -1767,7 +1771,7 @@ paths:
       security:
         - Jinya Api Key: []
     delete:
-      summary: Clears the Jinya Cache
+      summary: Clear Jinya Cache
       tags:
         - maintenance
         - cache
@@ -1806,7 +1810,7 @@ paths:
         - Jinya Api Key: []
   /api/cache/symfony:
     put:
-      summary: Generates the Symfony Cache
+      summary: Generate Symfony Cache
       tags:
         - maintenance
         - cache
@@ -1844,7 +1848,7 @@ paths:
       security:
         - Jinya Api Key: []
     delete:
-      summary: Clears the Jinya Cache
+      summary: Clear Symfony Cache
       tags:
         - maintenance
         - cache
@@ -1883,7 +1887,7 @@ paths:
         - Jinya Api Key: []
   /api/cache/apcu:
     put:
-      summary: Generates the APCu Cache
+      summary: Generate APCu Cache
       tags:
         - maintenance
         - cache
@@ -1921,7 +1925,7 @@ paths:
       security:
         - Jinya Api Key: []
     delete:
-      summary: Clears the APCu Cache
+      summary: Clear APCu Cache
       tags:
         - maintenance
         - cache
@@ -1960,7 +1964,7 @@ paths:
         - Jinya Api Key: []
   /api/cache/opcache:
     put:
-      summary: Generates the OP Cache
+      summary: Generate OP Cache
       tags:
         - maintenance
         - cache
@@ -1998,7 +2002,7 @@ paths:
       security:
         - Jinya Api Key: []
     delete:
-      summary: Clears the OP Cache
+      summary: Clear OP Cache
       tags:
         - maintenance
         - cache
@@ -2037,7 +2041,7 @@ paths:
         - Jinya Api Key: []
   /api/cache:
     get:
-      summary: Gets the current cache
+      summary: Get cache state
       tags:
         - maintenance
         - cache
@@ -2164,7 +2168,7 @@ paths:
         - Jinya Api Key: []
   /api/changelog:
     get:
-      summary: Gets the current changelog
+      summary: Get changelog
       tags:
         - maintenance
         - changelog
@@ -2192,7 +2196,7 @@ paths:
       description: Gets the current changelog
   /api/environment:
     get:
-      summary: Gets the current environment
+      summary: Get environment
       tags:
         - maintenance
         - cache
@@ -2261,7 +2265,7 @@ paths:
         - Jinya Api Key: []
   /api/phpinfo:
     get:
-      summary: Gets the current PHP info
+      summary: Get php info
       tags:
         - maintenance
         - phpinfo
@@ -3114,7 +3118,7 @@ paths:
         - Jinya Api Key: []
   /api/maintenance/version:
     get:
-      summary: Gets the current version
+      summary: Get current version
       tags:
         - maintenance
         - cache
@@ -3154,13 +3158,13 @@ paths:
                 Invalid api key:
                   value:
                     message: Username could not be found.
-      operationId: api_environment_get_all
+      operationId: api_maintenance_version
       description: Returns the current version of the CMS
       security:
         - Jinya Api Key: []
   /api/media/file:
     get:
-      summary: Gets a list of all uploaded files
+      summary: List files
       tags:
         - media
         - content
@@ -5805,7 +5809,7 @@ paths:
           name: keyword
           description: The keyword to filter the files by
     post:
-      summary: Creates a new file
+      summary: Create file
       tags:
         - media
         - content
@@ -6016,7 +6020,7 @@ paths:
         - Jinya Api Key: []
       description: Deletes the given file
     get:
-      summary: Gets the file with the specified id
+      summary: Get file by id
       tags:
         - content
         - media
@@ -6123,7 +6127,7 @@ paths:
         - Jinya Api Key: []
       requestBody: {}
     get:
-      summary: Gets the files content with the specified id
+      summary: Get file content by id
       tags:
         - content
         - media
@@ -6157,8 +6161,13 @@ paths:
         name: id
         in: path
         required: true
+      - schema:
+          type: integer
+        name: position
+        in: path
+        required: true
     put:
-      summary: Uploads the file chunk at the given position
+      summary: Upload file chunk
       tags:
         - content
         - media
@@ -6217,7 +6226,7 @@ paths:
         in: path
         required: true
     delete:
-      summary: Deletes the current upload state
+      summary: Delete upload state
       tags:
         - content
         - media
@@ -6276,7 +6285,7 @@ paths:
         in: path
         required: true
     put:
-      summary: Finishes the file upload
+      summary: Finish upload
       tags:
         - content
         - media
@@ -6329,7 +6338,7 @@ paths:
       requestBody: {}
   /api/media/gallery:
     get:
-      summary: Gets all galleries
+      summary: List galleries
       tags:
         - content
         - media
@@ -6482,7 +6491,7 @@ paths:
           name: keyword
           description: The keyword to filter the galleries by
     post:
-      summary: Creates a new gallery
+      summary: Create gallery
       tags:
         - content
         - media
@@ -6618,7 +6627,7 @@ paths:
         in: path
         required: true
     put:
-      summary: Updates the gallery with the specified slug
+      summary: Update gallery by slug
       tags:
         - content
         - media
@@ -6658,7 +6667,7 @@ paths:
               schema:
                 $ref: ../models/Exception.v1.yaml
               examples:
-                File not found:
+                Gallery not found:
                   value:
                     success: false
                     error:
@@ -6706,7 +6715,7 @@ paths:
                   orientation: horizontal
                   slug: some-beautiful-art
     delete:
-      summary: Deletes the gallery with the specified slug
+      summary: Delete gallery by slug
       tags:
         - content
         - media
@@ -6757,7 +6766,7 @@ paths:
         - Jinya Api Key: []
       description: Deletes the given gallery
     get:
-      summary: Gets the gallery with the specified slug
+      summary: Get gallery by slug
       tags:
         - content
         - media
@@ -6811,6 +6820,412 @@ paths:
                       type: NoResultException
       operationId: api_gallery_get
       description: Gets the gallery with the specified slug
+  '/api/media/gallery/file/{galleryId}/file':
+    parameters:
+      - schema:
+          type: integer
+        name: galleryId
+        in: path
+        required: true
+    get:
+      summary: List files by gallery id
+      tags:
+        - content
+        - media
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  position:
+                    type: integer
+                  file:
+                    type: object
+                    properties:
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tag:
+                              type: string
+                            id:
+                              type: integer
+                      path:
+                        type: string
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      type:
+                        type: string
+                  gallery:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      slug:
+                        type: string
+                      description:
+                        type: string
+              examples:
+                List of files:
+                  value:
+                    - id: 253
+                      position: 0
+                      file:
+                        tags:
+                          - tag: artwork
+                            id: 373
+                        path: /public/content_image/33b2128fae3bf9c7562d5b49f067e02033284fb7a88bfb1b229fe6e92e42aec0
+                        id: 552
+                        name: Final touch
+                        type: image/jpeg
+                      gallery:
+                        id: 38
+                        name: Digital Art
+                        slug: digital-art
+                        description: ''
+                    - id: 328
+                      position: 2
+                      file:
+                        tags:
+                          - tag: artwork
+                            id: 373
+                        path: /public/content_image/59f649a7d0012bc7d56dc088875c90a9b6ae4d1cbab2dcef2220ce2fdef5f798
+                        id: 555
+                        name: autumn
+                        type: image/jpeg
+                      gallery:
+                        id: 38
+                        name: Digital Art
+                        slug: digital-art
+                        description: ''
+                    - id: 252
+                      position: 4
+                      file:
+                        tags:
+                          - tag: artwork
+                            id: 373
+                        path: /public/content_image/494f9999f4822440271eb6f3d27eaa2277a32f9e631b1631c1c78c5fb9cb611f
+                        id: 532
+                        name: Gentle
+                        type: image/jpeg
+                      gallery:
+                        id: 38
+                        name: Digital Art
+                        slug: digital-art
+                        description: ''
+                    - id: 245
+                      position: 5
+                      file:
+                        tags:
+                          - tag: artwork
+                            id: 373
+                        path: /public/content_image/4032c91268fa8f2a52e827833fe653d1e10a80298e694fa74756c14d3f143764
+                        id: 470
+                        name: Lolita
+                        type: image/jpeg
+                      gallery:
+                        id: 38
+                        name: Digital Art
+                        slug: digital-art
+                        description: ''
+                    - id: 248
+                      position: 8
+                      file:
+                        tags:
+                          - tag: artwork
+                            id: 373
+                        path: /public/content_image/43fe2639640122ef5b3488dc2d46fc0d1899d3986ab39550377dc189fe6aca2b
+                        id: 512
+                        name: Link
+                        type: image/jpeg
+                      gallery:
+                        id: 38
+                        name: Digital Art
+                        slug: digital-art
+                        description: ''
+      operationId: api_gallery_file_get
+      description: Gets all files in the given gallery
+    post:
+      summary: Create file by gallery id
+      tags:
+        - content
+        - media
+      responses:
+        '201':
+          description: Added file to gallery
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gallery:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      slug:
+                        type: string
+                      description:
+                        type: string
+                  file:
+                    type: object
+                    properties:
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tag:
+                              type: string
+                            id:
+                              type: integer
+                      path:
+                        type: string
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      type:
+                        type: string
+                  position:
+                    type: integer
+                  id:
+                    type: integer
+              examples:
+                Returned file:
+                  value:
+                    gallery:
+                      id: 38
+                      name: Digital Art
+                      slug: digital-art
+                      description: ''
+                    file:
+                      tags: []
+                      path: /public/jinya-content/3bee07b4f7e63476f2c32d5798978c5d49e64fa6e6bb81ea1a91c462abef323d
+                      id: 1218
+                      name: asd31232132123jk-2ma45n5
+                      type: image/jpeg
+                    id: 363
+                    position: 1
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Gallery or file not found
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                Gallery or file not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_gallery_file_position_post
+      description: Adds a new file to the gallery
+      security:
+        - Jinya Api Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                position:
+                  type: integer
+                file:
+                  type: integer
+              required:
+                - position
+                - file
+            examples:
+              Gallery file:
+                value:
+                  position: 0
+                  file: 1218
+  '/api/media/gallery/file/{galleryId}/file/{galleryFileId}':
+    parameters:
+      - schema:
+          type: string
+        name: galleryId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: galleryFileId
+        in: path
+        required: true
+    delete:
+      summary: Delete file from gallery by id
+      tags:
+        - media
+        - content
+      responses:
+        '204':
+          description: Successfully deleted the file
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Gallery or file not found
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                GalleryFile not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_gallery_file_position_delete
+      security:
+        - Jinya Api Key: []
+      description: Deletes the gallery file from the given gallery
+  '/api/media/gallery/file/{galleryId}/file/{galleryFileId}/{oldPosition}':
+    parameters:
+      - schema:
+          type: string
+        name: galleryId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: galleryFileId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: oldPosition
+        in: path
+        required: true
+    put:
+      summary: Update file by gallery file id
+      tags:
+        - content
+        - media
+      responses:
+        '204':
+          description: Successfully updated the gallery file
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Gallery or file not found
+          content:
+            application/json:
+              schema:
+                $ref: ../models/Exception.v1.yaml
+              examples:
+                GalleryFile not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_gallery_file_position_put
+      description: Updates the given gallery file. The selected file and the position can be changed
+      security:
+        - Jinya Api Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: integer
+                newPosition:
+                  type: integer
+            examples:
+              Update request:
+                value:
+                  position: 5
+                  file: 1219
 components:
   schemas: {}
   securitySchemes:
