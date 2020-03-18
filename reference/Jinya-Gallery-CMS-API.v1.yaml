@@ -60,7 +60,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Unknown Device:
                   value:
@@ -73,7 +73,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Bad Credentials:
                   value:
@@ -239,7 +239,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/ValidationError.v1.yaml
+                $ref: '#/components/schemas/ValidationError'
               examples:
                 New password is missing:
                   value:
@@ -251,7 +251,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/AuthenticationError.v1.yaml
+                $ref: '#/components/schemas/AuthenticationError'
               examples:
                 Authentication Failed:
                   value:
@@ -264,7 +264,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Old Password is missing or invalid:
                   value:
@@ -321,7 +321,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Invalid username or password:
                   value:
@@ -334,7 +334,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Email failed:
                   value:
@@ -381,22 +381,7 @@ paths:
                     type: array
                     minItems: 1
                     items:
-                      type: object
-                      properties:
-                        remoteAddress:
-                          type: string
-                        userAgent:
-                          type: string
-                        key:
-                          type: string
-                        validSince:
-                          type: string
-                          format: date-time
-                      required:
-                        - remoteAddress
-                        - userAgent
-                        - key
-                        - validSince
+                      $ref: '#/components/schemas/ApiKey'
                 required:
                   - success
                   - invalidateApiKeyAfter
@@ -420,7 +405,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/AuthenticationError.v1.yaml
+                $ref: '#/components/schemas/AuthenticationError'
               examples:
                 Authentication Failed:
                   value:
@@ -464,7 +449,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/AuthenticationError.v1.yaml
+                $ref: '#/components/schemas/AuthenticationError'
               examples:
                 Authentication Failed:
                   value:
@@ -477,7 +462,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 The specified api key was not found:
                   value:
@@ -505,18 +490,9 @@ paths:
                   success:
                     type: boolean
                   items:
-                    type: object
-                    required:
-                      - remoteAddress
-                      - userAgent
-                      - key
-                    properties:
-                      remoteAddress:
-                        type: string
-                      userAgent:
-                        type: string
-                      key:
-                        type: string
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KnownDevice'
                   Sui:
                     type: string
                 required:
@@ -541,7 +517,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/AuthenticationError.v1.yaml
+                $ref: '#/components/schemas/AuthenticationError'
               examples:
                 Authentication failed:
                   value:
@@ -585,7 +561,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/AuthenticationError.v1.yaml
+                $ref: '#/components/schemas/AuthenticationError'
               examples:
                 Authentication failed:
                   value:
@@ -611,7 +587,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Not found error:
                   value:
@@ -738,7 +714,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 The selected theme was not found:
                   value:
@@ -773,7 +749,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: ../models/Form.v1.yaml
+                      $ref: '#/components/schemas/Form'
                   control:
                     type: string
               examples:
@@ -886,7 +862,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/ValidationError.v1.yaml
+                $ref: '#/components/schemas/ValidationError'
               examples:
                 Validation Error:
                   value:
@@ -925,7 +901,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Unique failed:
                   value:
@@ -983,7 +959,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Form.v1.yaml
+                $ref: '#/components/schemas/Form'
               examples:
                 Anonymously requested form:
                   value:
@@ -1091,7 +1067,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Form not found:
                   value:
@@ -1142,7 +1118,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Not found:
                   value:
@@ -1155,7 +1131,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Unique failed:
                   value:
@@ -1213,7 +1189,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: ../models/FormItem.v1.yaml
+                  $ref: '#/components/schemas/FormItem'
               examples:
                 Items:
                   value:
@@ -1290,7 +1266,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/FormItem.v1.yaml
+                $ref: '#/components/schemas/FormItem'
               examples:
                 Single form item:
                   value:
@@ -1355,7 +1331,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Not found:
                   value:
@@ -1464,7 +1440,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Form not found:
                   value:
@@ -1560,7 +1536,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Form or form item not found:
                   value:
@@ -1651,7 +1627,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Form or item not found:
                   value:
@@ -1719,7 +1695,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Form or form item not found:
                   value:
@@ -3179,7 +3155,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: ../models/File.v1.yaml
+                      $ref: '#/components/schemas/File'
                   count:
                     type: integer
               examples:
@@ -5819,7 +5795,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/File.v1.yaml
+                $ref: '#/components/schemas/File'
               examples:
                 Created file:
                   value:
@@ -5893,7 +5869,7 @@ paths:
         in: path
         required: true
     put:
-      summary: Updates the file with the specified id
+      summary: Update file by id
       tags:
         - content
         - media
@@ -5931,7 +5907,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 File not found:
                   value:
@@ -5944,7 +5920,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Unique failed:
                   value:
@@ -5969,7 +5945,7 @@ paths:
                 value:
                   name: Some art
     delete:
-      summary: Deletes the file with the specified id
+      summary: Delete file by id
       tags:
         - content
         - media
@@ -6007,7 +5983,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 File not found:
                   value:
@@ -6030,7 +6006,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/File.v1.yaml
+                $ref: '#/components/schemas/File'
               examples:
                 The requested file:
                   value:
@@ -6057,7 +6033,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 File not found:
                   value:
@@ -6113,7 +6089,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 File not found:
                   value:
@@ -6144,7 +6120,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 File not found:
                   value:
@@ -6205,7 +6181,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 File not found:
                   value:
@@ -6264,7 +6240,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 File not found:
                   value:
@@ -6323,7 +6299,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 File not found:
                   value:
@@ -6535,7 +6511,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/ValidationError.v1.yaml
+                $ref: '#/components/schemas/ValidationError'
               examples:
                 Name is missing:
                   value:
@@ -6573,7 +6549,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Validation error:
                   value:
@@ -6665,7 +6641,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Gallery not found:
                   value:
@@ -6678,7 +6654,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Unique failed:
                   value:
@@ -6753,7 +6729,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 File not found:
                   value:
@@ -6776,7 +6752,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Gallery.v1.yaml
+                $ref: '#/components/schemas/Gallery'
               examples:
                 The requested gallery:
                   value:
@@ -6810,7 +6786,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 File not found:
                   value:
@@ -7050,7 +7026,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 Gallery or file not found:
                   value:
@@ -7131,7 +7107,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 GalleryFile not found:
                   value:
@@ -7199,7 +7175,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../models/Exception.v1.yaml
+                $ref: '#/components/schemas/Exception'
               examples:
                 GalleryFile not found:
                   value:
@@ -7226,8 +7202,1273 @@ paths:
                 value:
                   position: 5
                   file: 1219
+  '/api/menu/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    put:
+      summary: Update menu by id id
+      tags:
+        - content
+        - media
+      responses:
+        '204':
+          description: Successfully updated menu
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exception'
+              examples:
+                File not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+        '409':
+          description: Name is not unique
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exception'
+              examples:
+                Unique failed:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.409.exists
+                      type: UniqueConstraintViolationException
+      operationId: api_menu_put
+      description: Updates the name of the given menu
+      security:
+        - Jinya Api Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+            examples:
+              Filled name:
+                value:
+                  name: Some art
+    delete:
+      summary: Delete menu by id
+      tags:
+        - content
+        - media
+      responses:
+        '204':
+          description: Menu successfully deleted
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exception'
+              examples:
+                File not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_menu_delete
+      security:
+        - Jinya Api Key: []
+      description: Deletes the given menu
+    get:
+      summary: Get menu by id
+      tags:
+        - content
+        - media
+      responses:
+        '200':
+          description: Successfully got the menu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Menu'
+              examples:
+                The requested menu:
+                  value:
+                    id: 1
+                    logo: /public/menu_logo/b15946f29815c38d034b36b710de32eaabf9939a069e8a272dacbdcb38b841c4
+                    name: Jane Doe
+                    children:
+                      - id: 798
+                        children:
+                          - id: 797
+                            position: 0
+                            title: Artist Info
+                            route:
+                              url: /artist-info
+                              name: frontend_page_details
+                              parameter:
+                                slug: artist-info
+                            highlighted: false
+                            pageType: page
+                            children: []
+                          - id: 799
+                            position: 3
+                            title: Contact
+                            route:
+                              url: /form/contact
+                              name: frontend_form_details
+                              parameter:
+                                slug: contact
+                            highlighted: false
+                            pageType: form
+                            children: []
+                          - id: 800
+                            position: 3
+                            title: Jane Doe
+                            route:
+                              url: /jane-doe
+                              name: frontend_profile_details
+                              parameter:
+                                slug: 7
+                            highlighted: false
+                            pageType: profile
+                            children: []
+                          - id: 801
+                            position: 2
+                            title: Imprint
+                            route:
+                              url: /imprint
+                              name: frontend_page_details
+                              parameter:
+                                slug: imprint
+                            highlighted: false
+                            pageType: page
+                            children: []
+                          - id: 802
+                            position: 5
+                            title: Data Protection
+                            route:
+                              url: /page/data-protection
+                              name: frontend_page_details
+                              parameter:
+                                slug: DATA-PROTECTION
+                            highlighted: false
+                            pageType: page
+                            children: []
+                        position: 0
+                        title: MAIN
+                        route:
+                          url: ''
+                          name: '#'
+                          parameter: []
+                        highlighted: true
+                        pageType: empty
+                      - id: 804
+                        children:
+                          - id: 803
+                            position: 9
+                            title: Digital Art
+                            route:
+                              url: /media_gallery/digital-art
+                              name: frontend_media_gallery_details
+                              parameter:
+                                slug: digital-art
+                            highlighted: false
+                            pageType: media_gallery
+                            children: []
+                          - id: 805
+                            position: 10
+                            title: Traditional Art
+                            route:
+                              url: /media_gallery/traditional-art
+                              name: frontend_media_gallery_details
+                              parameter:
+                                slug: traditional-art
+                            highlighted: false
+                            pageType: media_gallery
+                            children: []
+                          - id: 806
+                            position: 11
+                            title: Sketchbook
+                            route:
+                              url: /media_gallery/sketchbook
+                              name: frontend_media_gallery_details
+                              parameter:
+                                slug: sketchbook
+                            highlighted: false
+                            pageType: media_gallery
+                            children: []
+                          - id: 807
+                            position: 12
+                            title: Etching/Aquatint
+                            route:
+                              url: /media_gallery/etching-aquatint
+                              name: frontend_media_gallery_details
+                              parameter:
+                                slug: etching-aquatint
+                            highlighted: false
+                            pageType: media_gallery
+                            children: []
+                        position: 0
+                        title: PORTFOLIO
+                        route:
+                          url: ''
+                          name: '#'
+                          parameter: []
+                        highlighted: true
+                        pageType: empty
+                      - id: 808
+                        children: []
+                        position: 11
+                        title: COMICSTRIPS
+                        route:
+                          url: ''
+                          name: '#'
+                          parameter: []
+                        highlighted: true
+                        pageType: empty
+                      - id: 813
+                        children: []
+                        position: 16
+                        title: ANIMATIONS
+                        route:
+                          url: /animations
+                          name: frontend_page_details
+                          parameter:
+                            slug: animations
+                        highlighted: true
+                        pageType: page
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exception'
+              examples:
+                File not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_menu_get
+      description: Gets the menu with the specified id
+      security:
+        - Jinya Api Key: []
+  /api/menu:
+    get:
+      summary: List menus
+      tags:
+        - media
+        - content
+      responses:
+        '200':
+          description: Successfully returned all files
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Menu'
+                  count:
+                    type: integer
+                  offset:
+                    type: integer
+                  control:
+                    type: object
+                    properties:
+                      next:
+                        type: boolean
+                      previous:
+                        type: boolean
+                  success:
+                    type: boolean
+              examples:
+                List of menus:
+                  value:
+                    success: true
+                    offset: 0
+                    count: 1
+                    items:
+                      - name: Jane Doe
+                        logo: ''
+                        id: 1
+                    control:
+                      next: false
+                      previous: false
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+      operationId: api_menu_get_all
+      security:
+        - Jinya Api Key: []
+      requestBody: {}
+      description: Gets a list of all menus
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: The keyword to filter the menus by
+    post:
+      summary: Create file
+      tags:
+        - media
+        - content
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Menu'
+              examples:
+                Created menu:
+                  value:
+                    id: 8
+                    name: Beautiful Artworks
+                    logo: ''
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+      operationId: api_menu_post
+      description: 'Creates a new menu, uploading the logo needs to be done in the second step'
+      security:
+        - Jinya Api Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+            examples:
+              Simple menu:
+                value:
+                  name: Beautiful Artworks
+  '/api/menu/{id}/items/batch':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    put:
+      summary: Batch change menu by id
+      tags:
+        - configuration
+        - menu
+      responses: {}
+      operationId: put-api-menu-id-items-batch
+      security:
+        - Jinya Api Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  highlighted:
+                    type: boolean
+                  nestingLevel:
+                    type: integer
+                  pageType:
+                    type: string
+                    enum:
+                      - media_gallery
+                      - page
+                      - segment_page
+                      - form
+                      - profile
+                      - empty
+                      - external
+                  position:
+                    type: integer
+                  route:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      name:
+                        type: string
+                        enum:
+                          - frontend_page_details
+                          - frontend_form_details
+                          - frontend_profile_details
+                          - frontend_media_gallery_details
+                          - frontend_segment_page_details
+                          - '#'
+                      parameter:
+                        type: object
+                        properties:
+                          slug:
+                            type: string
+                          id:
+                            type: integer
+            examples:
+              Batch change request:
+                value:
+                  - title: Digital Art
+                    highlighted: false
+                    nestingLevel: 0
+                    pageType: media_gallery
+                    position: 0
+                    route:
+                      url: /media_gallery/digital-art
+                      name: frontend_media_gallery_details
+                      parameter:
+                        slug: digital-art
+                  - title: Traditional Art
+                    highlighted: false
+                    nestingLevel: 0
+                    pageType: media_gallery
+                    position: 1
+                    route:
+                      url: /media_gallery/traditional-art
+                      name: frontend_media_gallery_details
+                      parameter:
+                        slug: traditional-art
+                  - title: Animations
+                    highlighted: false
+                    nestingLevel: 0
+                    pageType: media_gallery
+                    position: 2
+                    route:
+                      url: /media_gallery/animations
+                      name: frontend_media_gallery_details
+                      parameter:
+                        slug: animations
+                  - title: Group
+                    highlighted: true
+                    nestingLevel: 0
+                    pageType: empty
+                    position: 3
+                    route:
+                      url: ''
+                      name: '#'
+                      parameter: []
+                  - title: Popular
+                    highlighted: false
+                    nestingLevel: 1
+                    pageType: media_gallery
+                    position: 3
+                    route:
+                      url: /media_gallery/popular
+                      name: frontend_media_gallery_details
+                      parameter:
+                        slug: popular
+                  - title: Contact me
+                    highlighted: false
+                    nestingLevel: 1
+                    pageType: form
+                    position: 4
+                    route:
+                      url: /form/contact-form
+                      name: frontend_form_details
+                      parameter:
+                        slug: contact-form
+                  - title: Artist info
+                    highlighted: false
+                    nestingLevel: 0
+                    pageType: page
+                    position: 5
+                    route:
+                      url: /page/artist-info
+                      name: frontend_page_details
+                      parameter:
+                        slug: artist-info
+                  - title: Jane Doe
+                    highlighted: false
+                    nestingLevel: 0
+                    pageType: profile
+                    position: 6
+                    route:
+                      url: /profile/13
+                      name: frontend_profile_details
+                      parameter:
+                        slug: 13
+        description: ''
+      description: Batch updates the items of a menu.
 components:
-  schemas: {}
+  schemas:
+    Menu:
+      title: Menu
+      type: object
+      x-tags:
+        - menu
+        - configuration
+      description: 'Menus are the central navigation entities in Jinya. In the theme config, they can be assigned to a theme'
+      properties:
+        id:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/MenuItem'
+        logo:
+          type: string
+        name:
+          type: string
+      required:
+        - id
+        - name
+    ApiKey:
+      title: ApiKey
+      type: object
+      x-tags:
+        - authentication
+      description: The ApiKey is used to authenticate a user against the Jinya RESTful API
+      properties:
+        key:
+          type: string
+        remoteAddress:
+          type: string
+        user:
+          $ref: '#/components/schemas/Artist'
+        userAgent:
+          type: string
+        validSince:
+          type: string
+          format: date-time
+    Artist:
+      title: Artist
+      type: object
+      required:
+        - artistName
+        - email
+      properties:
+        id:
+          type: integer
+        artistName:
+          type: string
+        roles:
+          type: array
+          enum:
+            - ROLE_SUPER_ADMIN
+            - ROLE_ADMIN
+            - ROLE_WRITER
+          items:
+            type: string
+        email:
+          type: string
+          format: email
+        enabled:
+          type: string
+        firstname:
+          type: string
+          deprecated: true
+        lastname:
+          type: string
+          deprecated: true
+        profilePicture:
+          type: string
+      description: 'Artists are the users, that log in to Jinya and add content'
+      x-tags:
+        - artist
+        - configuration
+    AuthenticationError:
+      title: AuthenticationError
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+      required:
+        - type
+        - title
+        - status
+        - detail
+    Configuration:
+      title: Configuration
+      x-tags:
+        - maintenance
+      description: The configuration of jinya
+      properties:
+        invalidateApiKeyAfter:
+          type: integer
+          default: 86400
+        messagingCenterEnabled:
+          type: boolean
+          default: true
+        theme:
+          type: integer
+          description: Links to the id of an existing theme
+      type: object
+    Exception:
+      title: Exception
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          default: false
+          enum:
+            - 'false'
+        error:
+          type: object
+          required:
+            - message
+            - type
+          properties:
+            message:
+              type: string
+            type:
+              type: string
+      type: object
+    File:
+      title: File
+      type: object
+      x-tags:
+        - media
+        - content
+      description: A file is an uploaded file that can be used in pages and galleries
+      properties:
+        id:
+          type: integer
+        created:
+          $ref: '#/components/schemas/Modification'
+        galleries:
+          type: array
+          items:
+            $ref: '#/components/schemas/GalleryFilePosition'
+        name:
+          type: string
+        path:
+          type: string
+        type:
+          type: string
+        updated:
+          $ref: '#/components/schemas/Modification'
+      required:
+        - name
+    Form:
+      title: Form
+      type: object
+      description: 'A form is a content element, that allows end users to send requests and feedback to the artist'
+      x-tags:
+        - form
+        - content
+      properties:
+        created:
+          $ref: '#/components/schemas/Modification'
+        description:
+          type: string
+        history:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormItem'
+        name:
+          type: string
+          deprecated: true
+        title:
+          type: string
+        toAddress:
+          type: string
+        updated:
+          $ref: '#/components/schemas/Modification'
+        slug:
+          type: string
+      required:
+        - title
+        - toAddress
+    FormItem:
+      title: FormItem
+      required:
+        - label
+      properties:
+        id:
+          type: integer
+        created:
+          $ref: '#/components/schemas/Modification'
+        form:
+          type: object
+          properties:
+            slug:
+              type: string
+            title:
+              type: string
+        helpText:
+          type: string
+        history:
+          type: array
+          items:
+            type: object
+        label:
+          type: string
+        options:
+          type: object
+          properties:
+            required:
+              type: string
+            choices:
+              type: array
+              items:
+                type: string
+            from_address:
+              type: boolean
+            subject:
+              type: boolean
+        position:
+          type: integer
+        spamFilter:
+          type: array
+          items:
+            type: string
+        type:
+          type: string
+          enum:
+            - "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
+            - "Symfony\\Component\\Form\\Extension\\Core\\Type\\EmailType"
+            - "Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType"
+            - "Symfony\\Component\\Form\\Extension\\Core\\Type\\CheckboxType"
+            - "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextareaType"
+        updated:
+          $ref: '#/components/schemas/Modification'
+      description: A form item is a field in a form
+      x-tags:
+        - form
+        - content
+      type: object
+    Gallery:
+      title: Gallery
+      x-tags:
+        - content
+        - media
+      description: A gallery is a way to organize files to display them to end users
+      type: object
+      properties:
+        id:
+          type: integer
+        created:
+          $ref: '#/components/schemas/Modification'
+        description:
+          type: string
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/GalleryFilePosition'
+        history:
+          type: array
+          items: {}
+        name:
+          type: string
+        orientation:
+          type: string
+          enum:
+            - horizontal
+            - vertical
+        slug:
+          type: string
+        type:
+          type: string
+          enum:
+            - sequence
+            - masonry
+        updated:
+          $ref: '#/components/schemas/Modification'
+      required:
+        - id
+        - created
+    GalleryFilePosition:
+      title: GalleryFilePosition
+      x-tags:
+        - media
+        - content
+      description: A GalleryFilePosition connects a file to a gallery
+      type: object
+      properties:
+        id:
+          type: integer
+        file:
+          $ref: '#/components/schemas/File'
+        gallery:
+          $ref: '#/components/schemas/Gallery'
+        position:
+          type: integer
+      required:
+        - id
+        - file
+        - gallery
+        - position
+    KnownDevice:
+      title: KnownDevice
+      type: object
+      x-tags:
+        - authentication
+      properties:
+        key:
+          type: string
+        remoteAddress:
+          type: string
+        userAgent:
+          type: string
+      required:
+        - key
+        - remoteAddress
+        - userAgent
+    ValidationError:
+      title: ValidationError
+      type: object
+      x-tags:
+        - error
+      properties:
+        success:
+          type: boolean
+        validation:
+          type: object
+    Theme:
+      title: Theme
+      type: object
+      x-tags:
+        - theme
+        - configuration
+      properties:
+        config:
+          type: object
+        description:
+          type: string
+        displayName:
+          type: string
+        files:
+          type: object
+          properties:
+            '':
+              type: object
+              description: This template defines the files in the theme. Each file name is the objects key
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+        footerMenu:
+          type: string
+          deprecated: true
+        forms:
+          type: object
+          description: ''
+          properties:
+            '':
+              type: object
+              description: This template defines the forms in the theme. Each forms name is the objects key
+              properties:
+                id:
+                  type: integer
+                slug:
+                  type: string
+                name:
+                  type: string
+        galleries:
+          type: object
+          description: ''
+          properties:
+            '':
+              type: object
+              description: This template defines the galleries in the theme. Each gallery name is the objects key
+              properties:
+                slug:
+                  type: string
+                name:
+                  type: string
+        menus:
+          type: object
+          description: This template defines the menus in the theme. Each menu name is the objects key
+          properties:
+            '':
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+        name:
+          type: string
+        pages:
+          type: object
+          properties:
+            '':
+              type: object
+              description: This template defines the pages in the theme. Each page name is the objects key
+              properties:
+                id:
+                  type: integer
+                slug:
+                  type: string
+                name:
+                  type: string
+        previewImage:
+          type: string
+        primaryMenu:
+          type: string
+          deprecated: true
+        scssVariables:
+          type: string
+        secondaryMenu:
+          type: string
+          deprecated: true
+        segmentPages:
+          type: object
+          properties:
+            '':
+              type: object
+              description: This template defines the segment pages in the theme. Each segment page name is the objects key
+              properties:
+                slug:
+                  type: string
+                name:
+                  type: string
+    SegmentPage:
+      title: SegmentPage
+      type: object
+      x-tags:
+        - page
+        - content
+      properties:
+        id:
+          type: integer
+        created:
+          $ref: '#/components/schemas/Modification'
+        history:
+          type: string
+        updated:
+          $ref: '#/components/schemas/Modification'
+        name:
+          type: string
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Segment'
+        slug:
+          type: string
+    Segment:
+      title: Segment
+      type: object
+      x-tags:
+        - content
+        - page
+      properties:
+        id:
+          type: integer
+        action:
+          type: string
+        file:
+          $ref: '#/components/schemas/File'
+        form:
+          $ref: '#/components/schemas/Form'
+        gallery:
+          $ref: '#/components/schemas/Gallery'
+        html:
+          type: string
+        page:
+          type: string
+        position:
+          type: string
+        script:
+          type: string
+        target:
+          type: string
+    RouteEntry:
+      title: RouteEntry
+      type: object
+      description: A RouteEntry contains the routing informations for the frontend
+      properties:
+        id:
+          type: integer
+        menuItem:
+          $ref: '#/components/schemas/MenuItem'
+        routeName:
+          type: string
+        routeParameter:
+          type: object
+          properties:
+            slug:
+              type: string
+        url:
+          type: string
+      required:
+        - menuItem
+        - routeName
+        - routeParameter
+        - url
+    Page:
+      title: Page
+      type: object
+      x-tags:
+        - content
+        - page
+      description: A page is a way to present static content like imprint or about me pages
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        slug:
+          type: string
+        created:
+          $ref: '#/components/schemas/Modification'
+        history:
+          type: array
+          items: {}
+        updated:
+          $ref: '#/components/schemas/Modification'
+      required:
+        - title
+        - content
+        - slug
+    Modification:
+      title: Modification
+      type: object
+      description: Contains the model of modifications that are set during update and create
+      properties:
+        by:
+          type: object
+          required:
+            - artistName
+            - email
+          properties:
+            artistName:
+              type: string
+            email:
+              type: string
+              format: email
+            profilePicture:
+              type: string
+        at:
+          type: string
+          format: date-time
+      required:
+        - by
+        - at
+    Message:
+      title: Message
+      type: object
+      x-tags:
+        - form
+        - content
+      description: A message is a submitted form element and displayed in the messaging center
+      properties:
+        id:
+          type: integer
+        archived:
+          type: boolean
+        content:
+          type: string
+        form:
+          $ref: '#/components/schemas/Form'
+        fromAddress:
+          type: string
+          format: email
+        read:
+          type: boolean
+        sendAt:
+          type: string
+          format: date-time
+        spam:
+          type: boolean
+        subject:
+          type: string
+        toAddress:
+          type: string
+          format: email
+        trash:
+          type: boolean
+      required:
+        - id
+        - content
+        - form
+        - fromAddress
+        - subject
+        - toAddress
+    MenuItem:
+      title: MenuItem
+      type: object
+      description: A MenuItem is an element in the menu navigation tree.
+      x-tags:
+        - configuration
+        - menu
+      properties:
+        id:
+          type: integer
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/MenuItem'
+        highlighted:
+          type: boolean
+          default: false
+        menu:
+          $ref: '#/components/schemas/Menu'
+        pageType:
+          type: string
+          enum:
+            - media_gallery
+            - page
+            - segment_page
+            - external
+            - form
+            - profile
+            - empty
+        parent:
+          $ref: '#/components/schemas/MenuItem'
+        position:
+          type: integer
+        route:
+          $ref: '#/components/schemas/RouteEntry'
+        title:
+          type: string
+      required:
+        - id
+        - pageType
+        - route
+        - title
   securitySchemes:
     Jinya Api Key:
       name: JinyaApiKey
