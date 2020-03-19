@@ -7693,7 +7693,48 @@ paths:
       tags:
         - configuration
         - menu
-      responses: {}
+      responses:
+        '204':
+          description: Successfully batch created the items
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Menu not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exception'
+              examples:
+                Menu not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
       operationId: put-api-menu-id-items-batch
       security:
         - Jinya Api Key: []
@@ -7828,6 +7869,607 @@ paths:
                         slug: 13
         description: ''
       description: Batch updates the items of a menu.
+  '/api/menu/{menuId}/items':
+    parameters:
+      - schema:
+          type: string
+        name: menuId
+        in: path
+        required: true
+    get:
+      summary: List items by menu id
+      tags:
+        - menu
+        - configuration
+      responses:
+        '200':
+          description: Successfully listed menu items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MenuItem'
+              examples:
+                Menu item list:
+                  value:
+                    - id: 832
+                      title: Digital Art
+                      position: 0
+                      route:
+                        url: /media_gallery/digital-art
+                        name: frontend_media_gallery_details
+                        parameter:
+                          slug: digital-art
+                      children: []
+                      pageType: media_gallery
+                      highlighted: false
+                    - id: 833
+                      title: Traditional Art
+                      position: 1
+                      route:
+                        url: /media_gallery/traditional-art
+                        name: frontend_media_gallery_details
+                        parameter:
+                          slug: traditional-art
+                      children: []
+                      pageType: media_gallery
+                      highlighted: false
+                    - id: 834
+                      title: Animations
+                      position: 2
+                      route:
+                        url: /media_gallery/animations
+                        name: frontend_media_gallery_details
+                        parameter:
+                          slug: animations
+                      children: []
+                      pageType: media_gallery
+                      highlighted: false
+                    - id: 836
+                      title: Gruppe
+                      position: 3
+                      route:
+                        url: ''
+                        name: '#'
+                        parameter: []
+                      children:
+                        - id: 835
+                          position: 3
+                          title: Popular
+                          route:
+                            url: /media_gallery/popular
+                            name: frontend_media_gallery_details
+                            parameter:
+                              slug: popular
+                          highlighted: false
+                          pageType: media_gallery
+                          children: []
+                        - id: 837
+                          position: 4
+                          title: Contact me
+                          route:
+                            url: /form/contact-form
+                            name: frontend_form_details
+                            parameter:
+                              slug: contact-form
+                          highlighted: false
+                          pageType: form
+                          children: []
+                      pageType: empty
+                      highlighted: true
+                    - id: 838
+                      title: Artist info
+                      position: 5
+                      route:
+                        url: /page/artist-info
+                        name: frontend_page_details
+                        parameter:
+                          slug: artist-info
+                      children: []
+                      pageType: page
+                      highlighted: false
+                    - id: 839
+                      title: Jane Doe
+                      position: 6
+                      route:
+                        url: /profile/13
+                        name: frontend_profile_details
+                        parameter:
+                          slug: 13
+                      children: []
+                      pageType: profile
+                      highlighted: false
+        '404':
+          description: Menu not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exception'
+              examples:
+                Menu not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_menu_items_get_all
+      description: Lists all menu items for the given menu
+  '/api/menu/{menuId}/items/{position}':
+    parameters:
+      - schema:
+          type: string
+        name: menuId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: position
+        in: path
+        required: true
+    get:
+      summary: Get item by menu id and position
+      tags:
+        - configuration
+        - menu
+      responses:
+        '200':
+          description: Successfully got menuitem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+              examples:
+                Menu item:
+                  value:
+                    title: Digital Art
+                    id: 832
+                    route:
+                      url: /media_gallery/digital-art
+                      name: frontend_media_gallery_details
+                      parameter:
+                        slug: digital-art
+                    menu:
+                      name: Jane Doe
+                    highlighted: false
+                    position: 0
+                    children: []
+      operationId: api_menu_items_get
+      description: 'Gets the menu item, that is in the given menu at the specified position.'
+    delete:
+      summary: Delete menu item by menu id and position
+      tags:
+        - configuration
+        - menu
+      responses:
+        '204':
+          description: Successfully deleted
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Menu or menu item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exception'
+              examples:
+                Menu not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_menu_items_delete_parent_menu
+      description: Deletes a menu item by menu id an position
+      security:
+        - Jinya Api Key: []
+    post:
+      summary: Create menu item by menu id and position
+      tags:
+        - configuration
+        - menu
+      operationId: api_menu_items_post_parent_menu
+      description: 'Creates a new menu item, by menu id and position.'
+      security:
+        - Jinya Api Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                highlighted:
+                  type: string
+                route:
+                  $ref: '#/components/schemas/RouteEntry'
+                pageType:
+                  type: string
+            examples:
+              New menu item:
+                value:
+                  title: Menu item
+                  highlighted: true
+                  route:
+                    url: /menu-item
+                    name: frontend_page_details
+                    parameter:
+                      slug: menu-item
+                  pageType: page
+      responses:
+        '201':
+          description: Created menu item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Menu'
+              examples:
+                New menu structure:
+                  value:
+                    id: 8
+                    name: Jane Doe
+                    children:
+                      - id: 832
+                        children: []
+                        position: 4
+                        title: Digital Art
+                        route:
+                          url: /media_gallery/digital-art
+                          name: frontend_media_gallery_details
+                          parameter:
+                            slug: digital-art
+                        highlighted: false
+                        pageType: media_gallery
+                      - id: 833
+                        children: []
+                        position: 5
+                        title: Traditional Art
+                        route:
+                          url: /media_gallery/traditional-art
+                          name: frontend_media_gallery_details
+                          parameter:
+                            slug: traditional-art
+                        highlighted: false
+                        pageType: media_gallery
+                      - id: 834
+                        children: []
+                        position: 6
+                        title: Animations
+                        route:
+                          url: /media_gallery/animations
+                          name: frontend_media_gallery_details
+                          parameter:
+                            slug: animations
+                        highlighted: false
+                        pageType: media_gallery
+                      - id: 836
+                        children:
+                          - id: 835
+                            position: 3
+                            title: Popular
+                            route:
+                              url: /media_gallery/popular
+                              name: frontend_media_gallery_details
+                              parameter:
+                                slug: popular
+                            highlighted: false
+                            pageType: media_gallery
+                            children: []
+                          - id: 837
+                            position: 4
+                            title: Contact me
+                            route:
+                              url: /form/contact-form
+                              name: frontend_form_details
+                              parameter:
+                                slug: contact-form
+                            highlighted: false
+                            pageType: form
+                            children: []
+                        position: 7
+                        title: Gruppe
+                        route:
+                          url: ''
+                          name: '#'
+                          parameter: []
+                        highlighted: true
+                        pageType: empty
+                      - id: 838
+                        children: []
+                        position: 8
+                        title: Artist info
+                        route:
+                          url: /page/artist-info
+                          name: frontend_page_details
+                          parameter:
+                            slug: artist-info
+                        highlighted: false
+                        pageType: page
+                      - id: 839
+                        children: []
+                        position: 9
+                        title: Jane Doe
+                        route:
+                          url: /profile/13
+                          name: frontend_profile_details
+                          parameter:
+                            slug: 13
+                        highlighted: false
+                        pageType: profile
+                      - id: 840
+                        children: []
+                        position: 3
+                        title: Menu item
+                        route:
+                          url: /menu-item
+                          name: frontend_page_details
+                          parameter: []
+                        highlighted: true
+                        pageType: page
+                      - id: 841
+                        children: []
+                        position: 2
+                        title: Menu item
+                        route:
+                          url: /menu-item
+                          name: frontend_page_details
+                          parameter:
+                            slug: menu-item
+                        highlighted: true
+                        pageType: page
+                      - id: 842
+                        children: []
+                        position: 1
+                        title: Menu item
+                        route:
+                          url: /menu-item
+                          name: frontend_page_details
+                          parameter:
+                            slug: menu-item
+                        highlighted: true
+                        pageType: page
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Menu or menu item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exception'
+              examples:
+                Menu not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+  '/api/menu/{menuId}/items/{parentId}/{position}':
+    parameters:
+      - schema:
+          type: string
+        name: menuId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: position
+        in: path
+        required: true
+    delete:
+      summary: 'Delete menu item by menu id, parent id and position'
+      tags:
+        - configuration
+        - menu
+      responses:
+        '204':
+          description: Successfully deleted
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Menu or menu item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exception'
+              examples:
+                Menu not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
+      operationId: api_menu_items_delete_parent_menu
+      description: Deletes a menu item by menu id an position
+      security:
+        - Jinya Api Key: []
+    post:
+      summary: 'Create menu item by menu id, parent id and position'
+      tags:
+        - configuration
+        - menu
+      operationId: api_menu_items_post_parent_menu_item
+      description: 'Creates a new menu item, by menu id and position.'
+      security:
+        - Jinya Api Key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                highlighted:
+                  type: string
+                route:
+                  $ref: '#/components/schemas/RouteEntry'
+                pageType:
+                  type: string
+            examples:
+              New menu item:
+                value:
+                  title: Menu item
+                  highlighted: true
+                  route:
+                    url: /menu-item
+                    name: frontend_page_details
+                    parameter:
+                      slug: menu-item
+                  pageType: page
+      responses:
+        '201':
+          description: Created menu item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Menu'
+              examples:
+                New menu item structure:
+                  value:
+                    id: 836
+                    children:
+                      - id: 835
+                        position: 3
+                        title: Popular
+                        route:
+                          url: /media_gallery/popular
+                          name: frontend_media_gallery_details
+                          parameter:
+                            slug: popular
+                        highlighted: false
+                        pageType: media_gallery
+                        children: []
+                      - id: 837
+                        position: 4
+                        title: Contact me
+                        route:
+                          url: /form/contact-form
+                          name: frontend_form_details
+                          parameter:
+                            slug: contact-form
+                        highlighted: false
+                        pageType: form
+                        children: []
+                    position: 7
+                    title: Gruppe
+                    route:
+                      url: ''
+                      name: '#'
+                      parameter: []
+                    highlighted: true
+                    pageType: empty
+        '401':
+          description: Api key missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                ApiKey missing:
+                  value:
+                    message: Authentication Required
+        '403':
+          description: Invalid api key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Invalid api key:
+                  value:
+                    message: Username could not be found.
+        '404':
+          description: Menu or menu item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exception'
+              examples:
+                Menu not found:
+                  value:
+                    success: false
+                    error:
+                      message: api.state.404.generic
+                      type: NoResultException
 components:
   schemas:
     Menu:
@@ -8318,8 +8960,6 @@ components:
       type: object
       description: A RouteEntry contains the routing informations for the frontend
       properties:
-        id:
-          type: integer
         menuItem:
           $ref: '#/components/schemas/MenuItem'
         routeName:
@@ -8329,6 +8969,8 @@ components:
           properties:
             slug:
               type: string
+            id:
+              type: integer
         url:
           type: string
       required:
@@ -8444,8 +9086,6 @@ components:
         highlighted:
           type: boolean
           default: false
-        menu:
-          $ref: '#/components/schemas/Menu'
         pageType:
           type: string
           enum:
@@ -8456,17 +9096,19 @@ components:
             - form
             - profile
             - empty
-        parent:
-          $ref: '#/components/schemas/MenuItem'
         position:
           type: integer
         route:
           $ref: '#/components/schemas/RouteEntry'
         title:
           type: string
+        menu:
+          type: object
+          properties:
+            name:
+              type: string
       required:
         - id
-        - pageType
         - route
         - title
   securitySchemes:
