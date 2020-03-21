@@ -18904,11 +18904,11 @@ tags:
 x-tagGroups:
   - name: Content management
     tags:
-      - theme
-      - menu
       - media
-      - form
       - page
+      - form
+      - menu
+      - theme
   - name: System management
     tags:
       - artist
