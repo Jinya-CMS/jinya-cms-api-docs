@@ -24,7 +24,6 @@ paths:
       responses:
         '200':
           description: Successfully logged in
-          headers: {}
           content:
             application/json:
               schema:
@@ -110,11 +109,11 @@ paths:
                   username: jane.doe@example.com
                   paswword: VeryS3cret
       parameters:
-        - schema:
+        - name: JinyaDeviceCode
+          description: The Jinya Device Code contains the identification for a known device
+          schema:
             type: string
           in: header
-          name: JinyaDeviceCode
-          description: The Jinya Device Code contains the identification for a known device
     head:
       summary: Check the validity of a Jinya Api Key
       tags:
@@ -128,13 +127,12 @@ paths:
       description: Checks whether the JinyaApiKey provided in the header is still valid.
       requestBody: {}
       parameters:
-        - schema:
+        - name: JinyaApiKey
+          description: The Jinya API Key that should get validated
+          schema:
             type: string
           in: header
-          name: JinyaApiKey
-          description: The Jinya API Key that should get validated
   api/account:
-    parameters: []
     get:
       summary: Get user info
       operationId: api_account_get
@@ -294,19 +292,15 @@ paths:
           application/xml:
             schema:
               type: object
-              properties: {}
           multipart/form-data:
             schema:
               type: object
-              properties: {}
           text/html:
             schema:
               type: object
-              properties: {}
           text/plain:
             schema:
               type: object
-              properties: {}
         description: ''
   /api/2fa:
     post:
@@ -430,12 +424,11 @@ paths:
       description: Gets all currently valid api keys
       security:
         - Jinya Api Key: []
-    parameters: []
   '/api/account/api_key/{key}':
     parameters:
-      - schema:
+      - name: key
+        schema:
           type: string
-        name: key
         in: path
         required: true
     delete:
@@ -470,7 +463,8 @@ paths:
                     error:
                       message: api.state.404.generic
                       type: NoResultException
-      tags: []
+      tags:
+        - authentication
       security:
         - Jinya Api Key: []
       description: Deletes the api key given in the request path
@@ -544,9 +538,9 @@ paths:
       description: Gets a list of all known devices
   '/api/account/known_device/{key}':
     parameters:
-      - schema:
+      - name: key
+        schema:
           type: string
-        name: key
         in: path
         required: true
     delete:
@@ -671,9 +665,9 @@ paths:
         - Jinya Api Key: []
   '/api/configuration/{themeName}':
     parameters:
-      - schema:
+      - name: themeName
+        schema:
           type: string
-        name: themeName
         in: path
         required: true
     put:
@@ -731,7 +725,6 @@ paths:
       summary: List forms
       tags:
         - form
-        - content
       responses:
         '200':
           description: Successfully listed forms
@@ -780,7 +773,6 @@ paths:
                               required: true
                               from_address: true
                             helptext: ''
-                            spamFilter: null
                           - id: 3
                             label: Concern
                             type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType"
@@ -793,14 +785,12 @@ paths:
                                 - Collaborations
                                 - Anything else
                             helptext: 'To help me respond quicker, please choose your concern'
-                            spamFilter: null
                           - id: 4
                             label: Text Message
                             type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextareaType"
                             options:
                               required: true
                             helptext: ''
-                            spamFilter: null
                       - slug: testformular
                         title: Testformular
                         description: ''
@@ -820,17 +810,16 @@ paths:
       security:
         - Jinya Api Key: []
       parameters:
-        - schema:
+        - name: keyword
+          description: The keyword to search by
+          schema:
             type: string
           in: query
-          name: keyword
-          description: The keyword to search by
       description: Gets all forms
     post:
       summary: Create form
       tags:
         - form
-        - content
       responses:
         '201':
           description: Successfully created the form
@@ -943,15 +932,14 @@ paths:
                   slug: contact-form
   '/api/form/{slug}':
     parameters:
-      - schema:
+      - name: slug
+        schema:
           type: string
-        name: slug
         in: path
         required: true
     get:
       summary: Get form by slug
       tags:
-        - content
         - form
       responses:
         '200':
@@ -1013,8 +1001,7 @@ paths:
                       - entry:
                           items:
                             - null
-                            - - id: null
-                                type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
+                            - - type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType"
                                 label: Name
                                 helpText: ''
                                 options:
@@ -1031,7 +1018,6 @@ paths:
     delete:
       summary: Deletes form by slug
       tags:
-        - content
         - form
       responses:
         '204':
@@ -1082,7 +1068,6 @@ paths:
     put:
       summary: Update form by slug
       tags:
-        - content
         - form
       responses:
         '204':
@@ -1171,15 +1156,14 @@ paths:
         - Jinya Api Key: []
   '/api/form/{slug}/items':
     parameters:
-      - schema:
+      - name: slug
+        schema:
           type: string
-        name: slug
         in: path
         required: true
     get:
       summary: List form items
       tags:
-        - content
         - form
       responses:
         '200':
@@ -1214,7 +1198,6 @@ paths:
                       label: Email
                       position: 1
                       type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\EmailType"
-                      spamFilter: null
                     - form:
                         title: Contact
                         slug: contact
@@ -1229,7 +1212,6 @@ paths:
                       label: Concern
                       position: 2
                       type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType"
-                      spamFilter: null
                     - form:
                         title: Contact
                         slug: contact
@@ -1238,27 +1220,25 @@ paths:
                       label: Text Message
                       position: 3
                       type: "Symfony\\Component\\Form\\Extension\\Core\\Type\\TextareaType"
-                      spamFilter: null
       operationId: api_form_item_get_all
       security:
         - Jinya Api Key: []
       description: Gets the items of the given form
   '/api/form/{slug}/items/{position}':
     parameters:
-      - schema:
+      - name: slug
+        schema:
           type: string
-        name: slug
         in: path
         required: true
-      - schema:
+      - name: position
+        schema:
           type: integer
-        name: position
         in: path
         required: true
     get:
       summary: Get form item by slug and position
       tags:
-        - content
         - form
       responses:
         '200':
@@ -1346,7 +1326,6 @@ paths:
     post:
       summary: Create new form item
       tags:
-        - content
         - form
       responses:
         '201':
@@ -1402,7 +1381,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
               examples:
                 Label missing:
                   value:
@@ -1500,7 +1478,6 @@ paths:
     put:
       summary: Update form item by slug and position
       tags:
-        - content
         - form
       responses:
         '204':
@@ -1591,7 +1568,6 @@ paths:
     delete:
       summary: Deletes form item by slug an position
       tags:
-        - content
         - form
       responses:
         '204':
@@ -1641,25 +1617,24 @@ paths:
       description: Deletes the form item at the given position in the given form
   '/api/form/{slug}/move/{oldPosition}/to/{newPosition}':
     parameters:
-      - schema:
+      - name: slug
+        schema:
           type: string
-        name: slug
         in: path
         required: true
-      - schema:
+      - name: oldPosition
+        schema:
           type: integer
-        name: oldPosition
         in: path
         required: true
-      - schema:
+      - name: newPosition
+        schema:
           type: integer
-        name: newPosition
         in: path
         required: true
     put:
       summary: Move form item
       tags:
-        - content
         - form
       responses:
         '204':
@@ -1710,9 +1685,6 @@ paths:
   /api/cache/jinya:
     put:
       summary: Generate Jinya Cache
-      tags:
-        - maintenance
-        - cache
       responses:
         '204':
           description: Successfully generated the cache
@@ -1746,11 +1718,12 @@ paths:
       description: Generates the Jinya cache and overwrites the existing cache files
       security:
         - Jinya Api Key: []
+      tags:
+        - maintenance
     delete:
       summary: Clear Jinya Cache
       tags:
         - maintenance
-        - cache
       responses:
         '204':
           description: Successfully cleared the cache
@@ -1789,7 +1762,6 @@ paths:
       summary: Generate Symfony Cache
       tags:
         - maintenance
-        - cache
       responses:
         '204':
           description: Successfully generated the cache
@@ -1827,7 +1799,6 @@ paths:
       summary: Clear Symfony Cache
       tags:
         - maintenance
-        - cache
       responses:
         '204':
           description: Successfully cleared the cache
@@ -1866,7 +1837,6 @@ paths:
       summary: Generate APCu Cache
       tags:
         - maintenance
-        - cache
       responses:
         '204':
           description: Successfully generated the cache
@@ -1904,7 +1874,6 @@ paths:
       summary: Clear APCu Cache
       tags:
         - maintenance
-        - cache
       responses:
         '204':
           description: Successfully cleared the cache
@@ -1943,7 +1912,6 @@ paths:
       summary: Generate OP Cache
       tags:
         - maintenance
-        - cache
       responses:
         '204':
           description: Successfully generated the cache
@@ -1981,7 +1949,6 @@ paths:
       summary: Clear OP Cache
       tags:
         - maintenance
-        - cache
       responses:
         '204':
           description: Successfully cleared the cache
@@ -2020,7 +1987,6 @@ paths:
       summary: Get cache state
       tags:
         - maintenance
-        - cache
       responses:
         '200':
           description: Successfully got the cache status
@@ -2088,7 +2054,6 @@ paths:
                       count: 0
                       freeMemory: -1
                       usedMemory: 0
-                    apcu: null
                     opcache:
                       count: 5875
                       freeMemory: 95722472
@@ -2107,7 +2072,6 @@ paths:
                       count: 5875
                       freeMemory: 95722472
                       usedMemory: 38179560
-                    opcache: null
                     symfony:
                       count: -1
                       freeMemory: -1
@@ -2147,7 +2111,6 @@ paths:
       summary: Get changelog
       tags:
         - maintenance
-        - changelog
       responses:
         '200':
           description: The changelog and version
@@ -2175,7 +2138,6 @@ paths:
       summary: Get environment
       tags:
         - maintenance
-        - cache
       responses:
         '200':
           description: Successfully got the cache status
@@ -2244,7 +2206,6 @@ paths:
       summary: Get php info
       tags:
         - maintenance
-        - phpinfo
       responses:
         '200':
           description: Successfully got the cache status
@@ -2416,10 +2377,8 @@ paths:
                           version: 7.4.3
                           name: libxml
                         - iniValues:
-                            - value: null
-                              name: openssl.cafile
-                            - value: null
-                              name: openssl.capath
+                            - name: openssl.cafile
+                            - name: openssl.capath
                           version: 7.4.3
                           name: openssl
                         - iniValues:
@@ -2443,8 +2402,7 @@ paths:
                         - iniValues:
                             - value: unsafe_raw
                               name: filter.default
-                            - value: null
-                              name: filter.default_flags
+                            - name: filter.default_flags
                           version: 7.4.3
                           name: filter
                         - iniValues: []
@@ -2524,8 +2482,7 @@ paths:
                               name: assert.active
                             - value: '0'
                               name: assert.bail
-                            - value: null
-                              name: assert.callback
+                            - name: assert.callback
                             - value: '1'
                               name: assert.exception
                             - value: '0'
@@ -2536,8 +2493,7 @@ paths:
                               name: auto_detect_line_endings
                             - value: '60'
                               name: default_socket_timeout
-                            - value: null
-                              name: from
+                            - name: from
                             - value: ''
                               name: session.trans_sid_hosts
                             - value: 'a=href,area=href,frame=src,form='
@@ -2548,8 +2504,7 @@ paths:
                               name: url_rewriter.hosts
                             - value: form=
                               name: url_rewriter.tags
-                            - value: null
-                              name: user_agent
+                            - name: user_agent
                           version: 7.4.3
                           name: standard
                         - iniValues:
@@ -2579,20 +2534,16 @@ paths:
                           version: '20031129'
                           name: dom
                         - iniValues:
-                            - value: null
-                              name: mbstring.detect_order
+                            - name: mbstring.detect_order
                             - value: '0'
                               name: mbstring.encoding_translation
                             - value: '0'
                               name: mbstring.func_overload
-                            - value: null
-                              name: mbstring.http_input
-                            - value: null
-                              name: mbstring.http_output
+                            - name: mbstring.http_input
+                            - name: mbstring.http_output
                             - value: "^(text/|application/xhtml\\+xml)"
                               name: mbstring.http_output_conv_mimetypes
-                            - value: null
-                              name: mbstring.internal_encoding
+                            - name: mbstring.internal_encoding
                             - value: neutral
                               name: mbstring.language
                             - value: '1000000'
@@ -2601,8 +2552,7 @@ paths:
                               name: mbstring.regex_stack_limit
                             - value: '0'
                               name: mbstring.strict_detection
-                            - value: null
-                              name: mbstring.substitute_character
+                            - name: mbstring.substitute_character
                           version: 7.4.3
                           name: mbstring
                         - iniValues: []
@@ -2660,8 +2610,7 @@ paths:
                               name: mysqlnd.collect_memory_statistics
                             - value: '1'
                               name: mysqlnd.collect_statistics
-                            - value: null
-                              name: mysqlnd.debug
+                            - name: mysqlnd.debug
                             - value: '0'
                               name: mysqlnd.fetch_data_copy
                             - value: '0'
@@ -2674,10 +2623,8 @@ paths:
                               name: mysqlnd.net_read_buffer_size
                             - value: '86400'
                               name: mysqlnd.net_read_timeout
-                            - value: null
-                              name: mysqlnd.sha256_server_public_key
-                            - value: null
-                              name: mysqlnd.trace_alloc
+                            - name: mysqlnd.sha256_server_public_key
+                            - name: mysqlnd.trace_alloc
                           version: mysqlnd 7.4.3
                           name: mysqlnd
                         - iniValues: []
@@ -2702,8 +2649,7 @@ paths:
                           version: 7.4.3
                           name: sodium
                         - iniValues:
-                            - value: null
-                              name: sqlite3.extension_dir
+                            - name: sqlite3.extension_dir
                           version: 7.4.3
                           name: sqlite3
                         - iniValues: []
@@ -2797,22 +2743,14 @@ paths:
                               name: xdebug.coverage_enable
                             - value: '1'
                               name: xdebug.default_enable
-                            - value: null
-                              name: xdebug.dump.COOKIE
-                            - value: null
-                              name: xdebug.dump.ENV
-                            - value: null
-                              name: xdebug.dump.FILES
-                            - value: null
-                              name: xdebug.dump.GET
-                            - value: null
-                              name: xdebug.dump.POST
-                            - value: null
-                              name: xdebug.dump.REQUEST
-                            - value: null
-                              name: xdebug.dump.SERVER
-                            - value: null
-                              name: xdebug.dump.SESSION
+                            - name: xdebug.dump.COOKIE
+                            - name: xdebug.dump.ENV
+                            - name: xdebug.dump.FILES
+                            - name: xdebug.dump.GET
+                            - name: xdebug.dump.POST
+                            - name: xdebug.dump.REQUEST
+                            - name: xdebug.dump.SERVER
+                            - name: xdebug.dump.SESSION
                             - value: '1'
                               name: xdebug.dump_globals
                             - value: '1'
@@ -2920,8 +2858,7 @@ paths:
                           name: auto_globals_jit
                         - value: ''
                           name: auto_prepend_file
-                        - value: null
-                          name: browscap
+                        - name: browscap
                         - value: UTF-8
                           name: default_charset
                         - value: text/html
@@ -2936,8 +2873,7 @@ paths:
                           name: display_errors
                         - value: ''
                           name: display_startup_errors
-                        - value: null
-                          name: doc_root
+                        - name: doc_root
                         - value: ''
                           name: docref_ext
                         - value: ''
@@ -2948,12 +2884,9 @@ paths:
                           name: enable_post_data_reading
                         - value: '1'
                           name: engine
-                        - value: null
-                          name: error_append_string
-                        - value: null
-                          name: error_log
-                        - value: null
-                          name: error_prepend_string
+                        - name: error_append_string
+                        - name: error_log
+                        - name: error_prepend_string
                         - value: '-1'
                           name: error_reporting
                         - value: '1'
@@ -2962,8 +2895,7 @@ paths:
                           name: extension_dir
                         - value: '1'
                           name: file_uploads
-                        - value: null
-                          name: from
+                        - name: from
                         - value: '2'
                           name: hard_timeout
                         - value: '1'
@@ -2978,10 +2910,8 @@ paths:
                           name: implicit_flush
                         - value: '.:/usr/share/pear:/usr/share/php'
                           name: include_path
-                        - value: null
-                          name: input_encoding
-                        - value: null
-                          name: internal_encoding
+                        - name: input_encoding
+                        - name: internal_encoding
                         - value: '0'
                           name: last_modified
                         - value: '1'
@@ -3000,14 +2930,11 @@ paths:
                           name: max_input_vars
                         - value: 128M
                           name: memory_limit
-                        - value: null
-                          name: open_basedir
+                        - name: open_basedir
                         - value: '4096'
                           name: output_buffering
-                        - value: null
-                          name: output_encoding
-                        - value: null
-                          name: output_handler
+                        - name: output_encoding
+                        - name: output_handler
                         - value: 8M
                           name: post_max_size
                         - value: '14'
@@ -3024,8 +2951,7 @@ paths:
                           name: report_zend_debug
                         - value: GP
                           name: request_order
-                        - value: null
-                          name: sendmail_from
+                        - name: sendmail_from
                         - value: /usr/sbin/sendmail -t -i
                           name: sendmail_path
                         - value: '-1'
@@ -3036,8 +2962,7 @@ paths:
                           name: SMTP
                         - value: '25'
                           name: smtp_port
-                        - value: null
-                          name: sys_temp_dir
+                        - name: sys_temp_dir
                         - value: '0'
                           name: track_errors
                         - value: ''
@@ -3046,10 +2971,8 @@ paths:
                           name: unserialize_max_depth
                         - value: 2M
                           name: upload_max_filesize
-                        - value: null
-                          name: upload_tmp_dir
-                        - value: null
-                          name: user_agent
+                        - name: upload_tmp_dir
+                        - name: user_agent
                         - value: ''
                           name: user_dir
                         - value: GPCS
@@ -3097,7 +3020,6 @@ paths:
       summary: Get current version
       tags:
         - maintenance
-        - cache
       responses:
         '200':
           description: Successfully got the cache status
@@ -3143,7 +3065,6 @@ paths:
       summary: List files
       tags:
         - media
-        - content
       responses:
         '200':
           description: Successfully returned all files
@@ -5777,16 +5698,15 @@ paths:
       requestBody: {}
       description: Gets a list of all uploaded files
       parameters:
-        - schema:
+        - name: keyword
+          description: The keyword to filter the files by
+          schema:
             type: string
           in: query
-          name: keyword
-          description: The keyword to filter the files by
     post:
       summary: Create file
       tags:
         - media
-        - content
       responses:
         '201':
           description: Created
@@ -5874,15 +5794,14 @@ paths:
                   name: Beautiful Artwork
   '/api/media/file/{id}':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Update file by id
       tags:
-        - content
         - media
       responses:
         '204':
@@ -5958,7 +5877,6 @@ paths:
     delete:
       summary: Delete file by id
       tags:
-        - content
         - media
       responses:
         '204':
@@ -6009,7 +5927,6 @@ paths:
     get:
       summary: Get file by id
       tags:
-        - content
         - media
       responses:
         '200':
@@ -6056,15 +5973,14 @@ paths:
       description: Gets the file with the specified id
   '/api/media/file/{id}/content':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Updates the file with the specified id
       tags:
-        - content
         - media
       responses:
         '204':
@@ -6116,7 +6032,6 @@ paths:
     get:
       summary: Get file content by id
       tags:
-        - content
         - media
       responses:
         '200':
@@ -6125,7 +6040,6 @@ paths:
             application/octet-stream:
               schema:
                 type: object
-                properties: {}
         '404':
           description: File not found
           content:
@@ -6143,20 +6057,19 @@ paths:
       description: Gets the files content with the specified id
   '/api/media/file/{id}/content/{position}':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
-      - schema:
+      - name: position
+        schema:
           type: integer
-        name: position
         in: path
         required: true
     put:
       summary: Upload file chunk
       tags:
-        - content
         - media
       responses:
         '204':
@@ -6207,15 +6120,14 @@ paths:
       requestBody: {}
   '/api/media/file/{id}/content/state':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     delete:
       summary: Delete upload state
       tags:
-        - content
         - media
       responses:
         '204':
@@ -6266,15 +6178,14 @@ paths:
       requestBody: {}
   '/api/media/file/{id}/content/finish':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Finish upload
       tags:
-        - content
         - media
       responses:
         '204':
@@ -6327,7 +6238,6 @@ paths:
     get:
       summary: List galleries
       tags:
-        - content
         - media
       responses:
         '200':
@@ -6472,15 +6382,14 @@ paths:
       operationId: api_gallery_get_all
       description: Gets all galleries saved in Jinya CMS
       parameters:
-        - schema:
+        - name: keyword
+          description: The keyword to filter the galleries by
+          schema:
             type: string
           in: query
-          name: keyword
-          description: The keyword to filter the galleries by
     post:
       summary: Create gallery
       tags:
-        - content
         - media
       responses:
         '201':
@@ -6608,15 +6517,14 @@ paths:
                   type: masonry
   '/api/media/gallery/{slug}':
     parameters:
-      - schema:
+      - name: slug
+        schema:
           type: string
-        name: slug
         in: path
         required: true
     put:
       summary: Update gallery by slug
       tags:
-        - content
         - media
       responses:
         '204':
@@ -6704,7 +6612,6 @@ paths:
     delete:
       summary: Delete gallery by slug
       tags:
-        - content
         - media
       responses:
         '204':
@@ -6755,7 +6662,6 @@ paths:
     get:
       summary: Get gallery by slug
       tags:
-        - content
         - media
       responses:
         '200':
@@ -6809,15 +6715,14 @@ paths:
       description: Gets the gallery with the specified slug
   '/api/media/gallery/file/{galleryId}/file':
     parameters:
-      - schema:
+      - name: galleryId
+        schema:
           type: integer
-        name: galleryId
         in: path
         required: true
     get:
       summary: List files by gallery id
       tags:
-        - content
         - media
       responses:
         '200':
@@ -6945,7 +6850,6 @@ paths:
     post:
       summary: Create file by gallery id
       tags:
-        - content
         - media
       responses:
         '201':
@@ -7069,21 +6973,20 @@ paths:
                   file: 1218
   '/api/media/gallery/file/{galleryId}/file/{galleryFileId}':
     parameters:
-      - schema:
+      - name: galleryId
+        schema:
           type: string
-        name: galleryId
         in: path
         required: true
-      - schema:
+      - name: galleryFileId
+        schema:
           type: string
-        name: galleryFileId
         in: path
         required: true
     delete:
       summary: Delete file from gallery by id
       tags:
         - media
-        - content
       responses:
         '204':
           description: Successfully deleted the file
@@ -7132,25 +7035,24 @@ paths:
       description: Deletes the gallery file from the given gallery
   '/api/media/gallery/file/{galleryId}/file/{galleryFileId}/{oldPosition}':
     parameters:
-      - schema:
+      - name: galleryId
+        schema:
           type: string
-        name: galleryId
         in: path
         required: true
-      - schema:
+      - name: galleryFileId
+        schema:
           type: string
-        name: galleryFileId
         in: path
         required: true
-      - schema:
+      - name: oldPosition
+        schema:
           type: string
-        name: oldPosition
         in: path
         required: true
     put:
       summary: Update file by gallery file id
       tags:
-        - content
         - media
       responses:
         '204':
@@ -7215,15 +7117,14 @@ paths:
                   file: 1219
   '/api/menu/{id}':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Update menu by id
       tags:
-        - content
         - media
       responses:
         '204':
@@ -7299,7 +7200,6 @@ paths:
     delete:
       summary: Delete menu by id
       tags:
-        - content
         - media
       responses:
         '204':
@@ -7547,7 +7447,6 @@ paths:
       security:
         - Jinya Api Key: []
       tags:
-        - configuration
         - menu
   /api/menu:
     get:
@@ -7615,19 +7514,17 @@ paths:
       requestBody: {}
       description: Gets a list of all menus
       parameters:
-        - schema:
+        - name: keyword
+          description: The keyword to filter the menus by
+          schema:
             type: string
           in: query
-          name: keyword
-          description: The keyword to filter the menus by
       tags:
-        - configuration
         - menu
     post:
       summary: Create menu
       tags:
         - media
-        - content
       responses:
         '201':
           description: Created
@@ -7700,15 +7597,14 @@ paths:
                   name: Beautiful Artworks
   '/api/menu/{id}/items/batch':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Batch change menu by id
       tags:
-        - configuration
         - menu
       responses:
         '204':
@@ -7888,16 +7784,15 @@ paths:
       description: Batch updates the items of a menu.
   '/api/menu/{menuId}/items':
     parameters:
-      - schema:
+      - name: menuId
+        schema:
           type: integer
-        name: menuId
         in: path
         required: true
     get:
       summary: List items by menu id
       tags:
         - menu
-        - configuration
       responses:
         '200':
           description: Successfully listed menu items
@@ -8014,20 +7909,19 @@ paths:
       description: Lists all menu items for the given menu
   '/api/menu/{menuId}/items/{position}':
     parameters:
-      - schema:
+      - name: menuId
+        schema:
           type: integer
-        name: menuId
         in: path
         required: true
-      - schema:
+      - name: position
+        schema:
           type: integer
-        name: position
         in: path
         required: true
     get:
       summary: Get item by menu id and position
       tags:
-        - configuration
         - menu
       responses:
         '200':
@@ -8311,19 +8205,19 @@ paths:
                       type: NoResultException
   '/api/menu/{menuId}/items/{parentId}/{position}':
     parameters:
-      - schema:
+      - name: menuId
+        schema:
           type: integer
-        name: menuId
         in: path
         required: true
-      - schema:
+      - name: position
+        schema:
           type: integer
-        name: position
         in: path
         required: true
-      - schema:
+      - name: parentId
+        schema:
           type: integer
-        name: parentId
         in: path
         required: true
     delete:
@@ -8380,7 +8274,6 @@ paths:
     post:
       summary: 'Create menu item by menu id, parent id and position'
       tags:
-        - configuration
         - menu
       operationId: api_menu_items_post_parent_menu_item
       description: 'Creates a new menu item, by menu id and position.'
@@ -8494,16 +8387,15 @@ paths:
                       type: NoResultException
   '/api/menu/{menuId}/logo':
     parameters:
-      - schema:
+      - name: menuId
+        schema:
           type: integer
-        name: menuId
         in: path
         required: true
     get:
       summary: Get logo by menu id
       tags:
         - menu
-        - configuration
       responses:
         '200':
           description: Successfully got the logo
@@ -8743,14 +8635,12 @@ paths:
           application/octet-stream:
             schema:
               type: object
-              properties: {}
         description: 'Raw image to upload, the file will be converted to png on upload'
   /api/maintenance/database/table:
     get:
       summary: List all tables
       tags:
         - maintenance
-        - database
       responses:
         '200':
           description: Successfully got all tables
@@ -8769,31 +8659,26 @@ paths:
                         fields:
                           - field: api_key
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(255)
                             nullable: false
                           - field: user_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: valid_since
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: user_agent
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
                           - field: remote_address
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
@@ -8803,73 +8688,61 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: description
                             extra: ''
-                            default: null
                             key: ''
                             type: text
                             nullable: true
                           - field: background
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: true
                           - field: slug
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: orientation
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: masonry
                             extra: ''
-                            default: null
                             key: ''
                             type: tinyint(1)
                             nullable: false
@@ -8879,13 +8752,11 @@ paths:
                         fields:
                           - field: art_gallery_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: label_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
@@ -8895,61 +8766,51 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: picture
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: description
                             extra: ''
-                            default: null
                             key: ''
                             type: text
                             nullable: true
                           - field: slug
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
@@ -8959,13 +8820,11 @@ paths:
                         fields:
                           - field: artwork_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: label_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
@@ -8975,25 +8834,21 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: gallery_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: artwork_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: position
                             extra: ''
-                            default: null
                             key: ''
                             type: int(11)
                             nullable: false
@@ -9003,19 +8858,16 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: current_frontend_theme_id
                             extra: ''
-                            default: null
                             key: UNI
                             type: int(11)
                             nullable: true
                           - field: invalidate_api_key_after
                             extra: ''
-                            default: null
                             key: ''
                             type: int(11)
                             nullable: false
@@ -9031,55 +8883,46 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: path
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: type
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
@@ -9089,13 +8932,11 @@ paths:
                         fields:
                           - field: file_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: tag_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
@@ -9105,73 +8946,61 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: to_address
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: email_template
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: slug
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: title
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: description
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
@@ -9181,79 +9010,66 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: type
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: options
                             extra: ''
-                            default: null
                             key: ''
                             type: text
                             nullable: false
                           - field: label
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: help_text
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: form_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: position
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: false
                           - field: spam_filter
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: true
@@ -9263,67 +9079,56 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: description
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: slug
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: type
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: orientation
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
@@ -9333,25 +9138,21 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: gallery_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: file_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: position
                             extra: ''
-                            default: null
                             key: ''
                             type: int(11)
                             nullable: false
@@ -9361,31 +9162,26 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: user_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: device_key
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: user_agent
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: remote_address
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
@@ -9395,13 +9191,11 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
@@ -9411,43 +9205,36 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: message
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: context
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: level
                             extra: ''
-                            default: null
                             key: ''
                             type: smallint(6)
                             nullable: false
                           - field: level_name
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(50)
                             nullable: false
                           - field: extra
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
@@ -9457,19 +9244,16 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: logo
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
@@ -9479,43 +9263,36 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: menu_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: parent_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: title
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: page_type
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: highlighted
                             extra: ''
-                            default: null
                             key: ''
                             type: tinyint(1)
                             nullable: false
                           - field: position
                             extra: ''
-                            default: null
                             key: ''
                             type: int(11)
                             nullable: false
@@ -9525,67 +9302,56 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: form_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: target_address
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: spam
                             extra: ''
-                            default: null
                             key: ''
                             type: tinyint(1)
                             nullable: false
                           - field: subject
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: content
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: from_address
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: send_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: is_archived
                             extra: ''
-                            default: null
                             key: ''
                             type: tinyint(1)
                             nullable: false
                           - field: is_deleted
                             extra: ''
-                            default: null
                             key: ''
                             type: tinyint(1)
                             nullable: false
                           - field: is_read
                             extra: ''
-                            default: null
                             key: ''
                             type: tinyint(1)
                             nullable: false
@@ -9595,13 +9361,11 @@ paths:
                         fields:
                           - field: version
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(14)
                             nullable: false
                           - field: executed_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: true
@@ -9611,61 +9375,51 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: content
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: title
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: slug
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
@@ -9675,31 +9429,26 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: route_name
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: route_parameter
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: url
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: menu_item_id
                             extra: ''
-                            default: null
                             key: UNI
                             type: int(11)
                             nullable: false
@@ -9709,91 +9458,76 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: page_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: artwork_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: form_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: video_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: youtube_video_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: art_gallery_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: video_gallery_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: html
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
                           - field: position
                             extra: ''
-                            default: null
                             key: ''
                             type: int(11)
                             nullable: false
                           - field: action
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: true
                           - field: script
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
                           - field: target
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
                           - field: gallery_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: file_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
@@ -9803,49 +9537,41 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: slug
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
@@ -9855,13 +9581,11 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: tag
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
@@ -9871,61 +9595,51 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: preview_image
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: configuration
                             extra: ''
-                            default: null
                             key: ''
                             type: text
                             nullable: false
                           - field: description
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: display_name
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: scss_variables
                             extra: ''
-                            default: null
                             key: ''
                             type: text
                             nullable: false
                           - field: primary_menu_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: secondary_menu_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: footer_menu_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
@@ -9935,19 +9649,16 @@ paths:
                         fields:
                           - field: theme_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: art_gallery_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(255)
                             nullable: false
@@ -9957,19 +9668,16 @@ paths:
                         fields:
                           - field: theme_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: artwork_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(255)
                             nullable: false
@@ -9979,19 +9687,16 @@ paths:
                         fields:
                           - field: name
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(255)
                             nullable: false
                           - field: theme_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: file_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
@@ -10001,19 +9706,16 @@ paths:
                         fields:
                           - field: theme_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: form_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(255)
                             nullable: false
@@ -10023,19 +9725,16 @@ paths:
                         fields:
                           - field: name
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(255)
                             nullable: false
                           - field: theme_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: gallery_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
@@ -10045,19 +9744,16 @@ paths:
                         fields:
                           - field: theme_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: menu_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(255)
                             nullable: false
@@ -10067,19 +9763,16 @@ paths:
                         fields:
                           - field: theme_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: page_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(255)
                             nullable: false
@@ -10089,19 +9782,16 @@ paths:
                         fields:
                           - field: name
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(255)
                             nullable: false
                           - field: theme_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: segment_page_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
@@ -10111,19 +9801,16 @@ paths:
                         fields:
                           - field: theme_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: video_gallery_id
                             extra: ''
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: PRI
                             type: varchar(255)
                             nullable: false
@@ -10133,13 +9820,11 @@ paths:
                         fields:
                           - field: id
                             extra: ''
-                            default: null
                             key: PRI
                             type: char(36)
                             nullable: false
                           - field: file_id
                             extra: ''
-                            default: null
                             key: UNI
                             type: int(11)
                             nullable: true
@@ -10149,25 +9834,21 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: uploading_file_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: char(36)
                             nullable: true
                           - field: chunk_path
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: chunk_position
                             extra: ''
-                            default: null
                             key: ''
                             type: int(11)
                             nullable: false
@@ -10177,13 +9858,11 @@ paths:
                         fields:
                           - field: id
                             extra: ''
-                            default: null
                             key: PRI
                             type: char(36)
                             nullable: false
                           - field: video_id
                             extra: ''
-                            default: null
                             key: UNI
                             type: int(11)
                             nullable: true
@@ -10193,25 +9872,21 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: uploading_video_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: char(36)
                             nullable: true
                           - field: chunk_path
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: chunk_position
                             extra: ''
-                            default: null
                             key: ''
                             type: int(11)
                             nullable: false
@@ -10221,85 +9896,71 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: email
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: enabled
                             extra: ''
-                            default: null
                             key: ''
                             type: tinyint(1)
                             nullable: false
                           - field: password
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: last_login
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: true
                           - field: confirmation_token
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
                           - field: password_requested_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: true
                           - field: roles
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: firstname
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
                           - field: lastname
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
                           - field: profile_picture
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
                           - field: two_factor_token
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
                           - field: artist_name
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: about_me
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
@@ -10309,67 +9970,56 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: description
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: video
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
                           - field: slug
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: poster
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: true
@@ -10379,73 +10029,61 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: background
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: true
                           - field: orientation
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: description
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: true
                           - field: slug
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: masonry
                             extra: ''
-                            default: null
                             key: ''
                             type: tinyint(1)
                             nullable: false
@@ -10455,31 +10093,26 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: gallery_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: video_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: youtube_video_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: position
                             extra: ''
-                            default: null
                             key: ''
                             type: int(11)
                             nullable: false
@@ -10489,61 +10122,51 @@ paths:
                         fields:
                           - field: id
                             extra: auto_increment
-                            default: null
                             key: PRI
                             type: int(11)
                             nullable: false
                           - field: creator_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: updated_by_id
                             extra: ''
-                            default: null
                             key: MUL
                             type: int(11)
                             nullable: true
                           - field: history
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: created_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: last_updated_at
                             extra: ''
-                            default: null
                             key: ''
                             type: datetime
                             nullable: false
                           - field: description
                             extra: ''
-                            default: null
                             key: ''
                             type: longtext
                             nullable: false
                           - field: videokey
                             extra: ''
-                            default: null
                             key: ''
                             type: varchar(255)
                             nullable: false
                           - field: slug
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
                           - field: name
                             extra: ''
-                            default: null
                             key: UNI
                             type: varchar(255)
                             nullable: false
@@ -10582,7 +10205,6 @@ paths:
       summary: Get database info
       tags:
         - maintenance
-        - database
       responses:
         '200':
           description: Successfully got the database info
@@ -13061,7 +12683,6 @@ paths:
     post:
       summary: Execute sql queries
       tags:
-        - database
         - maintenance
       responses:
         '200':
@@ -13264,19 +12885,17 @@ paths:
       requestBody: {}
       description: Gets a list of all pages
       parameters:
-        - schema:
+        - name: keyword
+          description: The keyword to filter the pages by
+          schema:
             type: string
           in: query
-          name: keyword
-          description: The keyword to filter the pages by
       tags:
-        - content
         - page
     post:
       summary: Create menu
       tags:
         - media
-        - content
       responses:
         '201':
           description: Created
@@ -13391,7 +13010,6 @@ paths:
                 title:
                   type: string
               required:
-                - content
                 - title
             examples:
               Simple page:
@@ -13450,15 +13068,14 @@ paths:
                     </div>
   '/api/page/{slug}':
     parameters:
-      - schema:
+      - name: slug
+        schema:
           type: string
-        name: slug
         in: path
         required: true
     put:
       summary: Update page by slug
       tags:
-        - content
         - media
       responses:
         '204':
@@ -13537,7 +13154,6 @@ paths:
     delete:
       summary: Delete page by slug
       tags:
-        - content
         - media
       responses:
         '204':
@@ -13588,7 +13204,6 @@ paths:
     get:
       summary: Get page by slug
       tags:
-        - content
         - page
       responses:
         '200':
@@ -13663,15 +13278,14 @@ paths:
         - Jinya Api Key: []
   '/api/segment_page/{slug}':
     parameters:
-      - schema:
+      - name: slug
+        schema:
           type: string
-        name: slug
         in: path
         required: true
     put:
       summary: Update page by slug
       tags:
-        - content
         - media
       responses:
         '204':
@@ -13750,7 +13364,6 @@ paths:
     delete:
       summary: Delete segment page by slug
       tags:
-        - content
         - media
       responses:
         '204':
@@ -13801,7 +13414,6 @@ paths:
     get:
       summary: Get page by slug
       tags:
-        - content
         - page
       responses:
         '200':
@@ -13867,8 +13479,6 @@ paths:
                           segments: []
                           updatedBy:
                             - id: 13
-                              firstname: null
-                              lastname: null
                               artistname: Jane Doe
                               profilepicture: /public/profile_picture/f87315300f531d32b6cf6541ba22b7a7625dae131ec8f1882027b4d2e5bb463f
                               email: jane.doe@example.com
@@ -13877,8 +13487,6 @@ paths:
                                 - ROLE_ADMIN
                                 - ROLE_WRITER
                             - id: 13
-                              firstname: null
-                              lastname: null
                               artistname: Jane Doe
                               profilepicture: /public/profile_picture/f87315300f531d32b6cf6541ba22b7a7625dae131ec8f1882027b4d2e5bb463f
                               email: jane.doe@example.com
@@ -13899,8 +13507,6 @@ paths:
                           segments: []
                           updatedBy:
                             - id: 13
-                              firstname: null
-                              lastname: null
                               artistname: Jane Doe
                               profilepicture: /public/profile_picture/f87315300f531d32b6cf6541ba22b7a7625dae131ec8f1882027b4d2e5bb463f
                               email: jane.doe@example.com
@@ -13909,8 +13515,6 @@ paths:
                                 - ROLE_ADMIN
                                 - ROLE_WRITER
                             - id: 13
-                              firstname: null
-                              lastname: null
                               artistname: Jane Doe
                               profilepicture: /public/profile_picture/f87315300f531d32b6cf6541ba22b7a7625dae131ec8f1882027b4d2e5bb463f
                               email: jane.doe@example.com
@@ -13931,8 +13535,6 @@ paths:
                           segments: []
                           updatedBy:
                             - id: 13
-                              firstname: null
-                              lastname: null
                               artistname: Jane Doe
                               profilepicture: /public/profile_picture/f87315300f531d32b6cf6541ba22b7a7625dae131ec8f1882027b4d2e5bb463f
                               email: jane.doe@example.com
@@ -13941,8 +13543,6 @@ paths:
                                 - ROLE_ADMIN
                                 - ROLE_WRITER
                             - id: 13
-                              firstname: null
-                              lastname: null
                               artistname: Jane Doe
                               profilepicture: /public/profile_picture/f87315300f531d32b6cf6541ba22b7a7625dae131ec8f1882027b4d2e5bb463f
                               email: jane.doe@example.com
@@ -14096,19 +13696,17 @@ paths:
       requestBody: {}
       description: Gets a list of all segment pages
       parameters:
-        - schema:
+        - name: keyword
+          description: The keyword to filter the segment pages by
+          schema:
             type: string
           in: query
-          name: keyword
-          description: The keyword to filter the segment pages by
       tags:
-        - content
         - page
     post:
       summary: Create menu
       tags:
         - media
-        - content
       responses:
         '201':
           description: Created
@@ -14199,16 +13797,15 @@ paths:
                   name: My bio
   '/api/segment_page/{slug}/segment':
     parameters:
-      - schema:
+      - name: slug
+        schema:
           type: string
-        name: slug
         in: path
         required: true
     get:
       summary: Get segment by segment page
       tags:
         - page
-        - content
       responses:
         '200':
           description: Successfully got segments
@@ -14273,17 +13870,17 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - properties:
+                  - required:
+                      - id
+                      - position
+                      - html
+                    properties:
                       id:
                         type: integer
                       position:
                         type: integer
                       html:
                         type: string
-                    required:
-                      - id
-                      - position
-                      - html
                 type: object
               examples:
                 HTML segment:
@@ -14367,11 +13964,11 @@ paths:
                     file:
                       type: string
                     action:
-                      type: string
                       enum:
                         - link
                         - none
                         - script
+                      type: string
                     target:
                       type: string
                     script:
@@ -14413,17 +14010,16 @@ paths:
         - Jinya Api Key: []
       tags:
         - page
-        - content
   '/api/segment_page/{slug}/segment/{id}':
     parameters:
-      - schema:
+      - name: slug
+        schema:
           type: string
-        name: slug
         in: path
         required: true
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
@@ -14435,17 +14031,17 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - properties:
+                  - required:
+                      - id
+                      - position
+                      - html
+                    properties:
                       id:
                         type: integer
                       position:
                         type: integer
                       html:
                         type: string
-                    required:
-                      - id
-                      - position
-                      - html
                 type: object
               examples:
                 HTML segment:
@@ -14521,37 +14117,37 @@ paths:
             schema:
               type: object
               oneOf:
-                - properties:
+                - required:
+                    - html
+                  properties:
                     position:
-                      type: integer
                       default: -1
+                      type: integer
                     html:
                       type: string
-                  required:
-                    - html
-                - properties:
+                - required:
+                    - file
+                  properties:
                     position:
-                      type: integer
                       default: -1
+                      type: integer
                     file:
                       type: string
                     action:
-                      type: string
                       default: none
                       enum:
                         - link
                         - none
                         - script
+                      type: string
                     target:
                       type: string
                     script:
                       type: string
-                  required:
-                    - file
                 - properties:
                     position:
-                      type: integer
                       default: -1
+                      type: integer
                     gallery:
                       type: string
             examples:
@@ -14585,12 +14181,10 @@ paths:
         - Jinya Api Key: []
       tags:
         - page
-        - content
     delete:
       summary: Delete a segment by page slug and segment id
       tags:
         - page
-        - content
       responses:
         '204':
           description: Successfully deleted the segment
@@ -14639,14 +14233,15 @@ paths:
         - Jinya Api Key: []
   '/api/segment_page/{slug}/preview':
     parameters:
-      - schema:
+      - name: slug
+        schema:
           type: string
-        name: slug
         in: path
         required: true
     get:
       summary: Get segment page preview
-      tags: []
+      tags:
+        - page
       responses:
         '200':
           description: Successfully generated preview
@@ -14654,7 +14249,6 @@ paths:
             text/html:
               schema:
                 type: object
-                properties: {}
         '401':
           description: Api key missing
           content:
@@ -14703,7 +14297,6 @@ paths:
       summary: List all themes
       tags:
         - theme
-        - configuration
       responses:
         '200':
           description: Successfully got all themes
@@ -14779,16 +14372,15 @@ paths:
         - Jinya Api Key: []
   '/api/theme/{themeName}':
     parameters:
-      - schema:
+      - name: themeName
+        schema:
           type: string
-        name: themeName
         in: path
         required: true
     get:
       summary: Get theme by name
       tags:
         - theme
-        - configuration
       responses:
         '200':
           description: Successfully got the theme
@@ -14806,12 +14398,8 @@ paths:
                     config:
                       page:
                         title: Jinya CMS
-                      footer:
-                        copyright: null
-                      favicon:
-                        small: null
-                        shortcut_icon: null
-                        large: null
+                      footer: {}
+                      favicon: {}
                       fonts:
                         menu: 'https://fonts.googleapis.com/css?family=Open+Sans'
                         heading: 'https://fonts.googleapis.com/css?family=Raleway:300,400'
@@ -14960,12 +14548,8 @@ paths:
                   config:
                     page:
                       title: Jinya CMS
-                    footer:
-                      copyright: null
-                    favicon:
-                      small: null
-                      shortcut_icon: null
-                      large: null
+                    footer: {}
+                    favicon: {}
                     fonts:
                       menu: 'https://fonts.googleapis.com/css?family=Open+Sans'
                       heading: 'https://fonts.googleapis.com/css?family=Raleway:300,400'
@@ -14990,16 +14574,15 @@ paths:
         - configuration
   '/api/theme/{themeName}/form/config':
     parameters:
-      - schema:
+      - name: themeName
+        schema:
           type: string
-        name: themeName
         in: path
         required: true
     get:
       summary: Get theme config form by name
       tags:
         - theme
-        - configuration
       responses:
         '200':
           description: Successfully got the theme config form
@@ -15132,16 +14715,15 @@ paths:
         - Jinya Api Key: []
   '/api/theme/{themeName}/form/variables':
     parameters:
-      - schema:
+      - name: themeName
+        schema:
           type: string
-        name: themeName
         in: path
         required: true
     get:
       summary: Get theme variables by name
       tags:
         - theme
-        - configuration
       responses:
         '200':
           description: Successfully got the variables with default values
@@ -15149,7 +14731,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
               examples:
                 Variables of Jinya default theme:
                   value:
@@ -15268,14 +14849,14 @@ paths:
       description: Gets the scss variables for the selected theme including default values
   '/api/theme/{themeName}/file/{key}':
     parameters:
-      - schema:
+      - name: themeName
+        schema:
           type: string
-        name: themeName
         in: path
         required: true
-      - schema:
+      - name: key
+        schema:
           type: string
-        name: key
         in: path
         required: true
     delete:
@@ -15332,7 +14913,6 @@ paths:
     put:
       summary: Add file by key
       tags:
-        - configuration
         - theme
       responses:
         '204':
@@ -15385,18 +14965,16 @@ paths:
           application/octet-stream:
             schema:
               type: object
-              properties: {}
   '/api/theme/{themeName}/preview':
     parameters:
-      - schema:
+      - name: themeName
+        schema:
           type: string
-        name: themeName
         in: path
         required: true
     get:
       summary: Get preview image
       tags:
-        - configuration
         - theme
       responses:
         '200':
@@ -15405,7 +14983,6 @@ paths:
             application/octet-stream:
               schema:
                 type: object
-                properties: {}
         '401':
           description: Api key missing
           content:
@@ -15451,14 +15028,15 @@ paths:
         - Jinya Api Key: []
   '/api/theme/{themeName}/links':
     parameters:
-      - schema:
+      - name: themeName
+        schema:
           type: string
-        name: themeName
         in: path
         required: true
     get:
       summary: Get theme links
-      tags: []
+      tags:
+        - theme
       responses:
         '200':
           description: Successfully got the links
@@ -15710,15 +15288,14 @@ paths:
         - Jinya Api Key: []
   '/api/theme/{themeName}/links/structure':
     parameters:
-      - schema:
+      - name: themeName
+        schema:
           type: string
-        name: themeName
         in: path
         required: true
     get:
       summary: Get theme links structure
       tags:
-        - configuration
         - theme
       responses:
         '200':
@@ -15794,15 +15371,14 @@ paths:
         - Jinya Api Key: []
   '/api/user/{id}':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Update user by id
       tags:
-        - content
         - media
       responses:
         '204':
@@ -15905,7 +15481,6 @@ paths:
     delete:
       summary: Delete user by id
       tags:
-        - content
         - media
       responses:
         '204':
@@ -15955,9 +15530,6 @@ paths:
       description: Deletes the given user
     get:
       summary: Get user by id
-      tags:
-        - content
-        - page
       responses:
         '200':
           description: Successfully got the user
@@ -16018,6 +15590,8 @@ paths:
       description: Gets the user with the given id
       security:
         - Jinya Api Key: []
+      tags:
+        - artist
   /api/user:
     get:
       summary: List users
@@ -16114,19 +15688,17 @@ paths:
       requestBody: {}
       description: Gets a list of all users (artists)
       parameters:
-        - schema:
+        - name: keyword
+          description: The keyword to filter the pages by
+          schema:
             type: string
           in: query
-          name: keyword
-          description: The keyword to filter the pages by
       tags:
-        - configuration
         - artist
     post:
       summary: Create menu
       tags:
         - media
-        - content
       responses:
         '201':
           description: Created
@@ -16242,16 +15814,15 @@ paths:
                     - ROLE_WRITER
   '/api/user/{id}/activation':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Activate user
       tags:
         - artist
-        - configuration
       responses:
         '204':
           description: Successfully activated the user
@@ -16351,15 +15922,14 @@ paths:
         - Jinya Api Key: []
   '/api/user/{id}/profilepicture':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Update user profile picture by id
       tags:
-        - content
         - media
       responses:
         '204':
@@ -16425,11 +15995,9 @@ paths:
           application/octet-stream:
             schema:
               type: object
-            examples: {}
     delete:
       summary: Delete user profile picture by id
       tags:
-        - content
         - media
       responses:
         '204':
@@ -16479,9 +16047,6 @@ paths:
       description: Deletes the given users profile picture
     get:
       summary: Get user profile picture by id
-      tags:
-        - content
-        - page
       responses:
         '200':
           description: Successfully got the profile picture
@@ -16542,12 +16107,13 @@ paths:
       description: Gets the users profile picture
       security:
         - Jinya Api Key: []
+      tags:
+        - artist
   /api/message:
     get:
       summary: Get messages
       tags:
         - form
-        - content
       responses:
         '200':
           description: Successfully got all messages
@@ -16793,24 +16359,23 @@ paths:
       security:
         - Jinya Api Key: []
       parameters:
-        - schema:
+        - name: count
+          schema:
             type: integer
           in: query
-          name: count
-        - schema:
+        - name: offset
+          schema:
             type: integer
           in: query
-          name: offset
-        - schema:
+        - name: keyword
+          schema:
             type: string
           in: query
-          name: keyword
   '/api/{formSlug}/message':
     get:
       summary: Get messages by form
       tags:
         - form
-        - content
       responses:
         '200':
           description: Successfully got all messages
@@ -17069,22 +16634,22 @@ paths:
       security:
         - Jinya Api Key: []
       parameters:
-        - schema:
+        - name: count
+          schema:
             type: integer
           in: query
-          name: count
-        - schema:
+        - name: offset
+          schema:
             type: integer
           in: query
-          name: offset
-        - schema:
+        - name: keyword
+          schema:
             type: string
           in: query
-          name: keyword
     parameters:
-      - schema:
+      - name: formSlug
+        schema:
           type: string
-        name: formSlug
         in: path
         required: true
   '/api/message/postbox/{postbox}':
@@ -17092,7 +16657,6 @@ paths:
       summary: Get messages by postbox
       tags:
         - form
-        - content
       responses:
         '200':
           description: Successfully got all messages
@@ -18057,36 +17621,35 @@ paths:
       security:
         - Jinya Api Key: []
       parameters:
-        - schema:
+        - name: count
+          schema:
             type: integer
           in: query
-          name: count
-        - schema:
+        - name: offset
+          schema:
             type: integer
           in: query
-          name: offset
-        - schema:
+        - name: keyword
+          schema:
             type: string
           in: query
-          name: keyword
     parameters:
-      - schema:
+      - name: postbox
+        schema:
           type: string
-        name: postbox
         in: path
         required: true
   '/api/message/{id}':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     get:
       summary: Get message by id
       tags:
         - form
-        - content
       responses:
         '200':
           description: Successfully got the message
@@ -18211,17 +17774,17 @@ paths:
       description: Deletes the given message
       tags:
         - form
-        - content
   '/api/message/{id}/spam':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Mark message as spam
-      tags: []
+      tags:
+        - form
       responses:
         '204':
           description: Successfully marked the message as spam
@@ -18270,14 +17833,15 @@ paths:
         - Jinya Api Key: []
   '/api/message/{id}/inbox':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Move message to inbox
-      tags: []
+      tags:
+        - form
       responses:
         '204':
           description: Successfully moved the message in the inbox
@@ -18326,14 +17890,15 @@ paths:
         - Jinya Api Key: []
   '/api/message/{id}/trash':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Mark message as deleted
-      tags: []
+      tags:
+        - form
       responses:
         '204':
           description: Successfully marked the message as deleted
@@ -18382,14 +17947,15 @@ paths:
         - Jinya Api Key: []
   '/api/message/{id}/archive':
     parameters:
-      - schema:
+      - name: id
+        schema:
           type: integer
-        name: id
         in: path
         required: true
     put:
       summary: Mark message as archived
-      tags: []
+      tags:
+        - form
       responses:
         '204':
           description: Successfully marked the message as archived
@@ -18551,7 +18117,6 @@ components:
       type: object
       x-tags:
         - media
-        - content
       description: A file is an uploaded file that can be used in pages and galleries
       properties:
         id:
@@ -18578,7 +18143,6 @@ components:
       description: 'A form is a content element, that allows end users to send requests and feedback to the artist'
       x-tags:
         - form
-        - content
       properties:
         created:
           $ref: '#/components/schemas/Modification'
@@ -18660,12 +18224,10 @@ components:
       description: A form item is a field in a form
       x-tags:
         - form
-        - content
       type: object
     Gallery:
       title: Gallery
       x-tags:
-        - content
         - media
       description: A gallery is a way to organize files to display them to end users
       type: object
@@ -18706,7 +18268,6 @@ components:
       title: GalleryFilePosition
       x-tags:
         - media
-        - content
       description: A GalleryFilePosition connects a file to a gallery
       type: object
       properties:
@@ -18874,12 +18435,8 @@ components:
           config:
             page:
               title: Jinya CMS
-            footer:
-              copyright: null
-            favicon:
-              small: null
-              shortcut_icon: null
-              large: null
+            footer: {}
+            favicon: {}
             fonts:
               menu: 'https://fonts.googleapis.com/css?family=Open+Sans'
               heading: 'https://fonts.googleapis.com/css?family=Raleway:300,400'
@@ -18929,7 +18486,6 @@ components:
       type: object
       x-tags:
         - page
-        - content
       properties:
         created:
           $ref: '#/components/schemas/Modification'
@@ -18947,7 +18503,6 @@ components:
       title: Segment
       type: object
       x-tags:
-        - content
         - page
       properties:
         id:
@@ -19015,7 +18570,6 @@ components:
       title: Page
       type: object
       x-tags:
-        - content
         - page
       description: A page is a way to present static content like imprint or about me pages
       properties:
@@ -19034,7 +18588,6 @@ components:
           deprecated: true
       required:
         - title
-        - content
         - slug
     Modification:
       title: Modification
@@ -19065,7 +18618,6 @@ components:
       type: object
       x-tags:
         - form
-        - content
       description: A message is a submitted form element and displayed in the messaging center
       properties:
         id:
@@ -19093,7 +18645,6 @@ components:
           type: boolean
       required:
         - id
-        - content
         - fromAddress
         - subject
         - toAddress
@@ -19153,31 +18704,26 @@ components:
             fields:
               - field: api_key
                 extra: ''
-                default: null
                 key: PRI
                 type: varchar(255)
                 nullable: false
               - field: user_id
                 extra: ''
-                default: null
                 key: MUL
                 type: int(11)
                 nullable: true
               - field: valid_since
                 extra: ''
-                default: null
                 key: ''
                 type: datetime
                 nullable: false
               - field: user_agent
                 extra: ''
-                default: null
                 key: ''
                 type: varchar(255)
                 nullable: true
               - field: remote_address
                 extra: ''
-                default: null
                 key: ''
                 type: varchar(255)
                 nullable: true
@@ -19204,7 +18750,6 @@ components:
         TableFieldMetadata:
           field: remote_address
           extra: ''
-          default: null
           key: ''
           type: varchar(255)
           nullable: true
@@ -19332,18 +18877,25 @@ components:
       in: header
       description: A Jinya API Key is generated after a user successfully logged in and returned in the response body of the login response
 tags:
-  - name: content
   - name: media
+    description: Media management
   - name: form
+    description: Form and message management
   - name: theme
+    description: Theme management
   - name: authentication
+    description: User authentication
   - name: page
-  - name: configuration
+    description: Page management
   - name: artist
+    description: Artist management
   - name: maintenance
-  - name: cache
+    description: Maintenance tasks
   - name: menu
-  - name: changelog
-  - name: phpinfo
+    description: Menu management
   - name: myjinya
+    description: My Jinya
   - name: database
+    description: Database management
+  - name: configuration
+    description: Jinya configuration
