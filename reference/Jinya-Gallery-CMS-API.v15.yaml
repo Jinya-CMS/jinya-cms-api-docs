@@ -18895,7 +18895,5 @@ tags:
     description: Menu management
   - name: myjinya
     description: My Jinya
-  - name: database
-    description: Database management
   - name: configuration
     description: Jinya configuration
