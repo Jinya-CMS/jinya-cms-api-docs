@@ -9,7 +9,7 @@ info:
   license:
     name: MIT
     url: 'https://github.com/Jinya-CMS/Jinya-Gallery-CMS/blob/develop/LICENSE'
-  description: This API docs specifies the the Jinya Gallery CMS API for the version 15.0.0
+  description: This API docs specifies the Jinya Gallery CMS API for the version 15.0.0
   x-logo:
     url: https://github.com/Jinya-CMS/Jinya-Gallery-CMS/raw/develop/assets/designer/img/android-chrome-512x512.png
     backgroundColor: "#FFFFFF"
