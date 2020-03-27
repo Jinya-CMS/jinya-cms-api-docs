@@ -11,9 +11,9 @@ info:
     url: 'https://github.com/Jinya-CMS/Jinya-Gallery-CMS/blob/develop/LICENSE'
   description: This API docs specifies the Jinya Gallery CMS API for the version 15.0.0
   x-logo:
-    url: https://github.com/Jinya-CMS/Jinya-Gallery-CMS/raw/develop/assets/designer/img/android-chrome-512x512.png
-    backgroundColor: "#FFFFFF"
-    altText: "Jinya logo"
+    url: 'https://github.com/Jinya-CMS/Jinya-Gallery-CMS/raw/develop/assets/designer/img/android-chrome-512x512.png'
+    backgroundColor: '#FFFFFF'
+    altText: Jinya logo
 servers:
   - url: 'http://localhost:8080'
     description: Local development environment
@@ -5983,12 +5983,12 @@ paths:
         in: path
         required: true
     put:
-      summary: Updates the file with the specified id
+      summary: Start file upload
       tags:
         - media
       responses:
         '204':
-          description: Successfully updated file
+          description: Successfully started the file upload
         '401':
           description: Api key missing
           content:
@@ -6029,7 +6029,7 @@ paths:
                       message: api.state.404.generic
                       type: NoResultException
       operationId: api_file_post_content_upload_start
-      description: Updates the name of the given file
+      description: Starts the file upload
       security:
         - Jinya Api Key: []
       requestBody: {}
@@ -6077,7 +6077,7 @@ paths:
         - media
       responses:
         '204':
-          description: Successfully uploaded the content file
+          description: Successfully uploaded the chunk
         '401':
           description: Api key missing
           content:
@@ -7128,8 +7128,6 @@ paths:
         required: true
     put:
       summary: Update menu by id
-      tags:
-        - media
       responses:
         '204':
           description: Successfully updated menu
@@ -7201,10 +7199,10 @@ paths:
               Filled name:
                 value:
                   name: Some art
+      tags:
+        - menu
     delete:
       summary: Delete menu by id
-      tags:
-        - media
       responses:
         '204':
           description: Menu successfully deleted
@@ -7251,6 +7249,8 @@ paths:
       security:
         - Jinya Api Key: []
       description: Deletes the given menu
+      tags:
+        - menu
     get:
       summary: Get menu by id
       responses:
@@ -12897,7 +12897,7 @@ paths:
       tags:
         - page
     post:
-      summary: Create menu
+      summary: Create page
       tags:
         - media
       responses:
@@ -13288,7 +13288,7 @@ paths:
         in: path
         required: true
     put:
-      summary: Update page by slug
+      summary: Update segment page by slug
       tags:
         - media
       responses:
@@ -13416,7 +13416,7 @@ paths:
         - Jinya Api Key: []
       description: Deletes the given segment page
     get:
-      summary: Get page by slug
+      summary: Get segment page by slug
       tags:
         - page
       responses:
@@ -13588,7 +13588,7 @@ paths:
                       message: api.state.404.generic
                       type: NoResultException
       operationId: api_segment_page_get
-      description: Gets the page with the specified slug
+      description: Gets the segment page with the specified slug
   /api/segment_page:
     get:
       summary: List segment pages
@@ -13708,7 +13708,7 @@ paths:
       tags:
         - page
     post:
-      summary: Create menu
+      summary: Create segment page
       tags:
         - media
       responses:
@@ -15700,7 +15700,7 @@ paths:
       tags:
         - artist
     post:
-      summary: Create menu
+      summary: Create user
       tags:
         - media
       responses:
@@ -17731,7 +17731,7 @@ paths:
       security:
         - Jinya Api Key: []
     delete:
-      summary: ''
+      summary: Delete message
       operationId: api_message_delete
       responses:
         '204':
