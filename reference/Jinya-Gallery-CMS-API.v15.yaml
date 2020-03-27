@@ -17,8 +17,6 @@ info:
 servers:
   - url: 'http://localhost:8080'
     description: Local development environment
-  - url: 'https://{jinya-server}'
-    description: Productive Jinya environment
 paths:
   /api/login:
     post:
