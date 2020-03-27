@@ -7525,8 +7525,6 @@ paths:
         - menu
     post:
       summary: Create menu
-      tags:
-        - media
       responses:
         '201':
           description: Created
@@ -7597,6 +7595,8 @@ paths:
               Simple menu:
                 value:
                   name: Beautiful Artworks
+      tags:
+        - menu
   '/api/menu/{id}/items/batch':
     parameters:
       - name: id
@@ -12896,8 +12896,6 @@ paths:
         - page
     post:
       summary: Create page
-      tags:
-        - media
       responses:
         '201':
           description: Created
@@ -13068,6 +13066,8 @@ paths:
                     <p>Faucibus nisl tincidunt eget nullam non nisi est. Tempus imperdiet nulla malesuada pellentesque elit eget gravida cum. Varius sit amet mattis vulputate enim. Odio ut sem nulla pharetra diam sit amet nisl suscipit. At risus viverra adipiscing at in tellus integer feugiat scelerisque. Metus dictum at tempor commodo ullamcorper a lacus vestibulum. Enim neque volutpat ac tincidunt vitae semper quis lectus. Egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium. Pellentesque dignissim enim sit amet. Cursus turpis massa tincidunt dui ut ornare lectus sit amet. Praesent semper feugiat nibh sed pulvinar proin gravida hendrerit lectus.</p>
                     <p>Vel quam elementum pulvinar etiam non quam lacus suspendisse faucibus. Nunc scelerisque viverra mauris in aliquam sem fringilla ut morbi. Purus faucibus ornare suspendisse sed. Vitae justo eget magna fermentum iaculis eu non diam. Arcu cursus vitae congue mauris rhoncus aenean vel. In egestas erat imperdiet sed euismod. Ipsum faucibus vitae aliquet nec ullamcorper sit amet risus. Et malesuada fames ac turpis egestas sed tempus urna. Molestie at elementum eu facilisis sed. Amet consectetur adipiscing elit duis tristique sollicitudin nibh sit. Magna etiam tempor orci eu lobortis elementum nibh tellus molestie. Amet tellus cras adipiscing enim eu turpis egestas pretium aenean. Sed enim ut sem viverra aliquet eget sit amet tellus. Urna cursus eget nunc scelerisque viverra mauris in aliquam. Feugiat nibh sed pulvinar proin gravida hendrerit lectus. Proin gravida hendrerit lectus a. Diam phasellus vestibulum lorem sed. Cursus sit amet dictum sit amet justo donec enim. Mi bibendum neque egestas congue quisque egestas diam in arcu.</p>
                     </div>
+      tags:
+        - page
   '/api/page/{slug}':
     parameters:
       - name: slug
@@ -13077,8 +13077,6 @@ paths:
         required: true
     put:
       summary: Update page by slug
-      tags:
-        - media
       responses:
         '204':
           description: Successfully updated page
@@ -13153,10 +13151,10 @@ paths:
                 value:
                   title: Jane says hello
                   content: 'Hello everyone, I am Jane'
+      tags:
+        - page
     delete:
       summary: Delete page by slug
-      tags:
-        - media
       responses:
         '204':
           description: Page successfully deleted
@@ -13203,6 +13201,8 @@ paths:
       security:
         - Jinya Api Key: []
       description: Deletes the given page
+      tags:
+        - page
     get:
       summary: Get page by slug
       tags:
@@ -13287,8 +13287,6 @@ paths:
         required: true
     put:
       summary: Update segment page by slug
-      tags:
-        - media
       responses:
         '204':
           description: Successfully updated segment page
@@ -13363,10 +13361,10 @@ paths:
                 value:
                   name: Jane says hello
                   slug: jane-says-hello
+      tags:
+        - page
     delete:
       summary: Delete segment page by slug
-      tags:
-        - media
       responses:
         '204':
           description: Segment page successfully deleted
@@ -13413,6 +13411,8 @@ paths:
       security:
         - Jinya Api Key: []
       description: Deletes the given segment page
+      tags:
+        - page
     get:
       summary: Get segment page by slug
       tags:
@@ -13707,8 +13707,6 @@ paths:
         - page
     post:
       summary: Create segment page
-      tags:
-        - media
       responses:
         '201':
           description: Created
@@ -13797,6 +13795,8 @@ paths:
               Simple page:
                 value:
                   name: My bio
+      tags:
+        - page
   '/api/segment_page/{slug}/segment':
     parameters:
       - name: slug
@@ -15380,8 +15380,6 @@ paths:
         required: true
     put:
       summary: Update user by id
-      tags:
-        - media
       responses:
         '204':
           description: Successfully updated user
@@ -15480,10 +15478,10 @@ paths:
                   enabled: true
                   roles:
                     - ROLE_WRITER
+      tags:
+        - artist
     delete:
       summary: Delete user by id
-      tags:
-        - media
       responses:
         '204':
           description: User successfully deleted
@@ -15530,6 +15528,8 @@ paths:
       security:
         - Jinya Api Key: []
       description: Deletes the given user
+      tags:
+        - artist
     get:
       summary: Get user by id
       responses:
@@ -15699,8 +15699,6 @@ paths:
         - artist
     post:
       summary: Create user
-      tags:
-        - media
       responses:
         '201':
           description: Created
@@ -15814,6 +15812,8 @@ paths:
                   enabled: true
                   roles:
                     - ROLE_WRITER
+      tags:
+        - artist
   '/api/user/{id}/activation':
     parameters:
       - name: id
@@ -15875,7 +15875,6 @@ paths:
       summary: Deactivate user
       tags:
         - artist
-        - configuration
       responses:
         '204':
           description: Successfully deactivated the user
@@ -15931,8 +15930,6 @@ paths:
         required: true
     put:
       summary: Update user profile picture by id
-      tags:
-        - media
       responses:
         '204':
           description: Successfully updated users profile picture
@@ -15997,10 +15994,10 @@ paths:
           application/octet-stream:
             schema:
               type: object
+      tags:
+        - artist
     delete:
       summary: Delete user profile picture by id
-      tags:
-        - media
       responses:
         '204':
           description: Users profile picture successfully deleted
@@ -16047,6 +16044,8 @@ paths:
       security:
         - Jinya Api Key: []
       description: Deletes the given users profile picture
+      tags:
+        - artist
     get:
       summary: Get user profile picture by id
       responses:
